@@ -1,0 +1,384 @@
+<!DOCTYPE html>
+<html lang="en" class="scroll-smooth">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Your Name - Data Scientist Portfolio</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Sora:wght@400;600;700&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --bg-color: #0d1117;
+            --primary-text: #c9d1d9;
+            --secondary-text: #8b949e;
+            --border-color: #30363d;
+            --card-bg: #161b22;
+            --accent-color: #38bdf8; /* A vibrant sky blue */
+            --accent-gradient: linear-gradient(to right, #38bdf8, #a371f7);
+        }
+        html {
+            scroll-behavior: smooth;
+        }
+        body {
+            font-family: 'Sora', sans-serif;
+            background-color: var(--bg-color);
+            color: var(--primary-text);
+        }
+        .text-gradient {
+            background: var(--accent-gradient);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+        .card {
+            background-color: var(--card-bg);
+            border: 1px solid var(--border-color);
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+            position: relative;
+            overflow: hidden;
+        }
+        .card:hover {
+            transform: translateY(-8px);
+            box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.2), 0 10px 10px -5px rgba(0, 0, 0, 0.1);
+        }
+        .card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: radial-gradient(circle at var(--mouse-x, 50%) var(--mouse-y, 50%), rgba(255, 255, 255, 0.06), transparent 40%);
+            opacity: 0;
+            transition: opacity 0.3s ease;
+        }
+        .card:hover::before {
+            opacity: 1;
+        }
+        .tag {
+            background-color: rgba(56, 189, 248, 0.1);
+            color: var(--accent-color);
+            padding: 0.35rem 0.85rem;
+            border-radius: 9999px;
+            font-size: 0.75rem;
+            font-weight: 600;
+        }
+        .filter-btn {
+            background-color: #21262d;
+            border: 1px solid var(--border-color);
+            color: var(--primary-text);
+            transition: all 0.2s ease;
+        }
+        .filter-btn:hover {
+            background-color: #30363d;
+            border-color: var(--accent-color);
+        }
+        .filter-btn.active {
+            background-color: var(--accent-color);
+            color: #0d1117;
+            border-color: var(--accent-color);
+        }
+        .project-card {
+            transition: all 0.4s ease-in-out;
+        }
+        .project-card.hidden {
+            transform: scale(0.9);
+            opacity: 0;
+            height: 0;
+            padding: 0;
+            margin: 0;
+            overflow: hidden;
+            border: none;
+        }
+        .typing-cursor {
+            display: inline-block;
+            width: 3px;
+            height: 1em;
+            background: var(--accent-color);
+            animation: blink 1s infinite;
+            margin-left: 5px;
+            vertical-align: middle;
+            border-radius: 2px;
+        }
+        @keyframes blink {
+            0%, 100% { opacity: 1; }
+            50% { opacity: 0; }
+        }
+        .glassmorphism {
+            background: rgba(13, 17, 23, 0.7);
+            backdrop-filter: blur(10px);
+            -webkit-backdrop-filter: blur(10px);
+            border-bottom: 1px solid rgba(48, 54, 61, 0.5);
+        }
+        .animated-section {
+            opacity: 0;
+            transform: translateY(30px);
+            transition: opacity 0.6s ease-out, transform 0.6s ease-out;
+        }
+        .animated-section.visible {
+            opacity: 1;
+            transform: translateY(0);
+        }
+    </style>
+</head>
+<body class="antialiased">
+
+    <!-- Header & Navigation -->
+    <header class="fixed top-0 left-0 right-0 z-50 glassmorphism">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="flex items-center justify-between h-16">
+                <div class="flex-shrink-0">
+                    <a href="#" class="text-2xl font-bold text-white">Your Name</a>
+                </div>
+                <div class="hidden md:block">
+                    <div class="ml-10 flex items-baseline space-x-4">
+                        <a href="#about" class="text-gray-300 hover:text-white px-3 py-2 rounded-md text-sm font-medium">About</a>
+                        <a href="#projects" class="text-gray-300 hover:text-white px-3 py-2 rounded-md text-sm font-medium">Projects</a>
+                        <a href="#experience" class="text-gray-300 hover:text-white px-3 py-2 rounded-md text-sm font-medium">Experience</a>
+                        <a href="#contact" class="text-gray-300 hover:text-white px-3 py-2 rounded-md text-sm font-medium">Contact</a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </header>
+
+    <main>
+        <!-- Hero Section -->
+        <section id="hero" class="min-h-screen flex items-center justify-center text-center px-4">
+            <div>
+                <h1 class="text-5xl md:text-7xl font-bold text-white">
+                    Hi, I'm Your Name
+                </h1>
+                <h2 class="text-3xl md:text-5xl font-semibold mt-4 h-16">
+                    <span class="text-gradient" id="typing-text"></span><span class="typing-cursor"></span>
+                </h2>
+                <p class="mt-6 max-w-2xl mx-auto text-lg text-gray-400">
+                    I transform data into intelligent insights. I'm a data scientist specializing in machine learning and cloud technologies, with a passion for building solutions that drive business value.
+                </p>
+                <div class="mt-8 flex justify-center gap-4">
+                    <a href="#projects" class="bg-sky-500 text-white font-semibold py-3 px-6 rounded-lg hover:bg-sky-600 transition-all duration-300 transform hover:scale-105">
+                        View My Work
+                    </a>
+                    <a href="#" class="bg-gray-700 text-white font-semibold py-3 px-6 rounded-lg hover:bg-gray-600 transition-all duration-300 transform hover:scale-105">
+                        Download Resume
+                    </a>
+                </div>
+                 <div class="mt-10 flex justify-center space-x-6">
+                    <a href="#" class="text-gray-400 hover:text-white transition-colors"><svg class="w-7 h-7" fill="currentColor" viewBox="0 0 24 24"><path d="M12 0C5.37 0 0 5.37 0 12c0 5.3 3.438 9.8 8.207 11.387.6.11.793-.26.793-.577v-2.234c-3.338.726-4.033-1.416-4.033-1.416-.546-1.387-1.333-1.756-1.333-1.756-1.089-.745.083-.729.083-.729 1.205.085 1.839 1.237 1.839 1.237 1.07 1.834 2.807 1.304 3.492.997.107-.775.418-1.305.762-1.604-2.665-.305-5.467-1.334-5.467-5.931 0-1.311.469-2.381 1.236-3.221-.124-.303-.535-1.524.117-3.176 0 0 1.008-.322 3.301 1.23A11.509 11.509 0 0112 5.803c1.02.005 2.047.138 3.006.404 2.291-1.552 3.297-1.23 3.297-1.23.653 1.653.242 2.874.118 3.176.77.84 1.235 1.91 1.235 3.221 0 4.609-2.807 5.624-5.479 5.921.43.372.823 1.102.823 2.222v3.293c0 .319.192.694.801.576C20.565 21.795 24 17.295 24 12 24 5.37 18.627 0 12 0z"/></svg></a>
+                    <a href="#" class="text-gray-400 hover:text-white transition-colors"><svg class="w-7 h-7" fill="currentColor" viewBox="0 0 24 24"><path d="M19 0h-14c-2.761 0-5 2.239-5 5v14c0 2.761 2.239 5 5 5h14c2.762 0 5-2.239 5-5v-14c0-2.761-2.238-5-5-5zm-11 19h-3v-11h3v11zm-1.5-12.268c-.966 0-1.75-.784-1.75-1.75s.784-1.75 1.75-1.75 1.75.784 1.75 1.75-.784 1.75-1.75 1.75zm13.5 12.268h-3v-5.604c0-3.368-4-3.113-4 0v5.604h-3v-11h3v1.765c1.396-2.586 7-2.777 7 2.476v6.759z"/></svg></a>
+                 </div>
+            </div>
+        </section>
+
+        <!-- About Section -->
+        <section id="about" class="py-20 sm:py-32 animated-section">
+            <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 grid md:grid-cols-5 gap-12 items-center">
+                <div class="md:col-span-3">
+                    <h2 class="text-3xl font-bold text-white">About Me</h2>
+                    <p class="mt-4 text-lg text-gray-400">
+                        I'm a data scientist with a background in computer science and over 5 years of experience building data-intensive applications. My journey into data science began with a fascination for patterns and a drive to create tangible solutions from abstract numbers.
+                    </p>
+                    <p class="mt-4 text-lg text-gray-400">
+                        I specialize in the end-to-end machine learning lifecycle, from data ingestion and EDA to model deployment and monitoring. I'm proficient in Python and its data science ecosystem, and I'm always excited to learn new technologies to solve complex problems.
+                    </p>
+                </div>
+                <div class="md:col-span-2">
+                     <h3 class="text-xl font-bold text-white mb-4">My Toolkit</h3>
+                     <div class="space-y-4">
+                        <div>
+                            <p class="font-semibold">Python, SQL, R</p>
+                            <div class="w-full bg-gray-700 rounded-full h-2.5 mt-1"><div class="bg-sky-500 h-2.5 rounded-full" style="width: 95%"></div></div>
+                        </div>
+                        <div>
+                            <p class="font-semibold">Scikit-learn, Pandas, NumPy</p>
+                            <div class="w-full bg-gray-700 rounded-full h-2.5 mt-1"><div class="bg-sky-500 h-2.5 rounded-full" style="width: 90%"></div></div>
+                        </div>
+                        <div>
+                            <p class="font-semibold">TensorFlow, PyTorch</p>
+                            <div class="w-full bg-gray-700 rounded-full h-2.5 mt-1"><div class="bg-purple-500 h-2.5 rounded-full" style="width: 80%"></div></div>
+                        </div>
+                        <div>
+                            <p class="font-semibold">AWS, GCP, Docker</p>
+                            <div class="w-full bg-gray-700 rounded-full h-2.5 mt-1"><div class="bg-green-500 h-2.5 rounded-full" style="width: 85%"></div></div>
+                        </div>
+                     </div>
+                </div>
+            </div>
+        </section>
+        
+        <!-- Projects Section -->
+        <section id="projects" class="py-20 sm:py-32 bg-black bg-opacity-20 animated-section">
+            <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+                <div class="text-center">
+                    <h2 class="text-3xl font-bold text-white">Projects</h2>
+                    <p class="mt-4 text-lg text-gray-400">A selection of my work. Filter by category.</p>
+                </div>
+
+                <div id="filter-container" class="flex justify-center flex-wrap gap-2 mt-8">
+                    <button class="filter-btn active px-4 py-2 rounded-lg font-semibold" data-filter="all">All</button>
+                    <button class="filter-btn px-4 py-2 rounded-lg font-semibold" data-filter="ml">Machine Learning</button>
+                    <button class="filter-btn px-4 py-2 rounded-lg font-semibold" data-filter="viz">Data Visualization</button>
+                    <button class="filter-btn px-4 py-2 rounded-lg font-semibold" data-filter="nlp">NLP</button>
+                </div>
+
+                <div id="project-grid" class="mt-12 grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+                    <div class="project-card card" data-category="ml">
+                        <img src="https://placehold.co/600x400/0d1117/38bdf8?text=Churn+Prediction" class="w-full h-48 object-cover" alt="Churn Prediction Project">
+                        <div class="p-6">
+                            <div class="flex flex-wrap gap-2 mb-2"><span class="tag">Python</span><span class="tag">Classification</span></div>
+                            <h3 class="text-xl font-bold text-white">Customer Churn Prediction</h3>
+                            <p class="mt-2 text-gray-400">Developed a model using logistic regression to predict customer churn, helping to target retention campaigns effectively.</p>
+                            <div class="mt-4 flex gap-4"><a href="#" class="font-semibold text-sky-400 hover:underline">GitHub</a><a href="#" class="font-semibold text-sky-400 hover:underline">Case Study</a></div>
+                        </div>
+                    </div>
+                    <div class="project-card card" data-category="viz">
+                        <img src="https://placehold.co/600x400/0d1117/3fb950?text=Sales+Dashboard" class="w-full h-48 object-cover" alt="Sales Dashboard Project">
+                        <div class="p-6">
+                            <div class="flex flex-wrap gap-2 mb-2"><span class="tag">Tableau</span><span class="tag">SQL</span></div>
+                            <h3 class="text-xl font-bold text-white">Interactive Sales Dashboard</h3>
+                            <p class="mt-2 text-gray-400">Designed and built a dynamic Tableau dashboard to track KPIs and sales metrics across regions.</p>
+                             <div class="mt-4 flex gap-4"><a href="#" class="font-semibold text-sky-400 hover:underline">Live Demo</a></div>
+                        </div>
+                    </div>
+                    <div class="project-card card" data-category="nlp">
+                        <img src="https://placehold.co/600x400/0d1117/a371f7?text=Sentiment+Analysis" class="w-full h-48 object-cover" alt="Sentiment Analysis Project">
+                        <div class="p-6">
+                            <div class="flex flex-wrap gap-2 mb-2"><span class="tag">TensorFlow</span><span class="tag">NLP</span></div>
+                            <h3 class="text-xl font-bold text-white">Review Sentiment Analysis</h3>
+                            <p class="mt-2 text-gray-400">Fine-tuned a BERT model to classify customer reviews, achieving high accuracy in sentiment detection.</p>
+                             <div class="mt-4 flex gap-4"><a href="#" class="font-semibold text-sky-400 hover:underline">GitHub</a></div>
+                        </div>
+                    </div>
+                    <div class="project-card card" data-category="ml">
+                        <img src="https://placehold.co/600x400/0d1117/f0883e?text=Forecasting" class="w-full h-48 object-cover" alt="Forecasting Project">
+                        <div class="p-6">
+                            <div class="flex flex-wrap gap-2 mb-2"><span class="tag">Python</span><span class="tag">Time Series</span></div>
+                            <h3 class="text-xl font-bold text-white">Demand Forecasting</h3>
+                            <p class="mt-2 text-gray-400">Created a time series model (SARIMA) to forecast product demand, optimizing inventory management.</p>
+                            <div class="mt-4 flex gap-4"><a href="#" class="font-semibold text-sky-400 hover:underline">GitHub</a></div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Experience Section -->
+        <section id="experience" class="py-20 sm:py-32 animated-section">
+            <div class="max-w-3xl mx-auto px-4 sm:px-6 lg:px-8">
+                <h2 class="text-3xl font-bold text-white text-center">Career Journey</h2>
+                <div class="mt-12 relative border-l-2 border-gray-700">
+                    <div class="mb-10 ml-6">
+                        <span class="absolute flex items-center justify-center w-6 h-6 bg-sky-600 rounded-full -left-3 ring-8 ring-gray-800">
+                            <svg class="w-2.5 h-2.5 text-white" fill="currentColor" viewBox="0 0 20 20"><path d="M20 4a2 2 0 0 0-2-2h-2V1a1 1 0 0 0-2 0v1h-3V1a1 1 0 0 0-2 0v1H6V1a1 1 0 0 0-2 0v1H2a2 2 0 0 0-2 2v2h20V4Z"/></svg>
+                        </span>
+                        <h3 class="flex items-center mb-1 text-lg font-semibold text-white">Data Scientist <span class="bg-sky-100 text-sky-800 text-sm font-medium mr-2 px-2.5 py-0.5 rounded dark:bg-sky-900 dark:text-sky-300 ml-3">Current</span></h3>
+                        <time class="block mb-2 text-sm font-normal leading-none text-gray-500">Tech Solutions Inc. | 2022 - Present</time>
+                        <p class="text-base font-normal text-gray-400">Leading ML projects, deploying models to production on AWS, and mentoring junior data scientists.</p>
+                    </div>
+                    <div class="mb-10 ml-6">
+                        <span class="absolute flex items-center justify-center w-6 h-6 bg-sky-600 rounded-full -left-3 ring-8 ring-gray-800"><svg class="w-2.5 h-2.5 text-white" fill="currentColor" viewBox="0 0 20 20"><path d="M20 4a2 2 0 0 0-2-2h-2V1a1 1 0 0 0-2 0v1h-3V1a1 1 0 0 0-2 0v1H6V1a1 1 0 0 0-2 0v1H2a2 2 0 0 0-2 2v2h20V4Z"/></svg></span>
+                        <h3 class="mb-1 text-lg font-semibold text-white">Data Analyst</h3>
+                        <time class="block mb-2 text-sm font-normal leading-none text-gray-500">Data Insights Co. | 2020 - 2022</time>
+                        <p class="text-base font-normal text-gray-400">Performed exploratory data analysis, created reports, and built dashboards to inform business strategy.</p>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Contact Section -->
+        <section id="contact" class="py-20 sm:py-32 animated-section">
+            <div class="text-center max-w-2xl mx-auto">
+                <h2 class="text-3xl font-bold text-white">Get In Touch</h2>
+                <p class="mt-4 text-lg text-gray-400">
+                    I'm always open to discussing new projects, creative ideas, or opportunities to be part of an ambitious team. Feel free to reach out.
+                </p>
+                <a href="mailto:your.email@example.com" class="mt-8 inline-block bg-sky-500 text-white font-bold text-lg py-3 px-8 rounded-lg hover:bg-sky-600 transition-all duration-300 transform hover:scale-105">
+                    Say Hello
+                </a>
+            </div>
+        </section>
+    </main>
+
+    <footer class="border-t border-gray-800 py-6">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 text-center text-gray-500">
+            <p>&copy; 2025 Your Name. Built with Tailwind CSS.</p>
+        </div>
+    </footer>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+            // --- Typing Animation ---
+            const roles = ["Data Scientist", "ML Engineer", "Cloud Enthusiast", "Problem Solver"];
+            let roleIndex = 0;
+            let charIndex = 0;
+            const typingText = document.getElementById('typing-text');
+            function type() {
+                if (charIndex < roles[roleIndex].length) {
+                    typingText.textContent += roles[roleIndex].charAt(charIndex);
+                    charIndex++;
+                    setTimeout(type, 100);
+                } else {
+                    setTimeout(erase, 2000);
+                }
+            }
+            function erase() {
+                if (charIndex > 0) {
+                    typingText.textContent = roles[roleIndex].substring(0, charIndex - 1);
+                    charIndex--;
+                    setTimeout(erase, 50);
+                } else {
+                    roleIndex = (roleIndex + 1) % roles.length;
+                    setTimeout(type, 500);
+                }
+            }
+            type();
+
+            // --- Project Filtering ---
+            const filterContainer = document.getElementById('filter-container');
+            const projectCards = Array.from(document.querySelectorAll('.project-card'));
+            const filterButtons = Array.from(filterContainer.getElementsByClassName('filter-btn'));
+            filterContainer.addEventListener('click', (e) => {
+                if (e.target.tagName !== 'BUTTON') return;
+                const filter = e.target.dataset.filter;
+                filterButtons.forEach(btn => btn.classList.remove('active'));
+                e.target.classList.add('active');
+                projectCards.forEach(card => {
+                    const category = card.dataset.category;
+                    if (filter === 'all' || filter === category) {
+                        card.classList.remove('hidden');
+                    } else {
+                        card.classList.add('hidden');
+                    }
+                });
+            });
+
+            // --- Card Hover Effect ---
+            const cards = document.querySelectorAll('.card');
+            cards.forEach(card => {
+                card.addEventListener('mousemove', (e) => {
+                    const rect = card.getBoundingClientRect();
+                    const x = e.clientX - rect.left;
+                    const y = e.clientY - rect.top;
+                    card.style.setProperty('--mouse-x', `${(x / rect.width) * 100}%`);
+                    card.style.setProperty('--mouse-y', `${(y / rect.height) * 100}%`);
+                });
+            });
+            
+            // --- Scroll Animations ---
+            const observer = new IntersectionObserver((entries) => {
+                entries.forEach(entry => {
+                    if (entry.isIntersecting) {
+                        entry.target.classList.add('visible');
+                    }
+                });
+            }, {
+                threshold: 0.1
+            });
+            const sections = document.querySelectorAll('.animated-section');
+            sections.forEach(section => observer.observe(section));
+        });
+    </script>
+
+</body>
+</html>
