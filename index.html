@@ -5,57 +5,78 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Nikita Kumari - Data Scientist Portfolio</title>
     <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.9.1/gsap.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.9.1/ScrollTrigger.min.js"></script>
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Sora:wght@400;600;700&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Roboto+Flex:opsz,wght@8..144,400;8..144,600&family=Space+Mono:wght@400;700&display=swap" rel="stylesheet">
     <style>
         :root {
-            --bg-color: #0d1117;
-            --primary-text: #c9d1d9;
-            --secondary-text: #8b949e;
-            --border-color: #30363d;
-            --card-bg: #161b22;
-            --accent-color: #38bdf8; /* A vibrant sky blue */
-            --accent-gradient: linear-gradient(to right, #38bdf8, #a371f7);
+            --bg-color: #020617; /* Darker navy */
+            --primary-text: #e2e8f0; /* Lighter gray */
+            --secondary-text: #94a3b8;
+            --border-color: #1e293b;
+            --card-bg: #0f172a;
+            --accent-color: #38bdf8;
+            --accent-gradient: linear-gradient(to right, #38bdf8, #818cf8);
+            --font-heading: 'Space Mono', monospace;
+            --font-body: 'Roboto Flex', sans-serif;
         }
         html {
             scroll-behavior: smooth;
         }
         body {
-            font-family: 'Sora', sans-serif;
+            font-family: var(--font-body);
             background-color: var(--bg-color);
             color: var(--primary-text);
+            overflow-x: hidden;
+        }
+        h1, h2, h3, h4, h5, h6 {
+            font-family: var(--font-heading);
+        }
+        #particle-background {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            z-index: -1;
+            pointer-events: none;
         }
         .text-gradient {
             background: var(--accent-gradient);
             -webkit-background-clip: text;
-            background-clip: text; /* Added for compatibility */
+            background-clip: text;
             -webkit-text-fill-color: transparent;
+        }
+        .glassmorphism {
+            background: rgba(15, 23, 42, 0.7);
+            backdrop-filter: blur(12px);
+            -webkit-backdrop-filter: blur(12px);
+            border-bottom: 1px solid rgba(30, 41, 59, 0.5);
+        }
+        #globe-container {
+            cursor: move;
+            width: 100%;
+            height: 100%;
+            position: absolute;
+            top: 0;
+            left: 0;
+            z-index: 0;
         }
         .card {
             background-color: var(--card-bg);
             border: 1px solid var(--border-color);
-            transition: transform 0.3s ease, box-shadow 0.3s ease;
+            transition: transform 0.3s ease, box-shadow 0.3s ease, border-color 0.3s ease;
             position: relative;
             overflow: hidden;
+            border-radius: 0.75rem;
         }
         .card:hover {
-            transform: translateY(-8px);
-            box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.2), 0 10px 10px -5px rgba(0, 0, 0, 0.1);
-        }
-        .card::before {
-            content: '';
-            position: absolute;
-            top: 0;
-            left: 0;
-            right: 0;
-            bottom: 0;
-            background: radial-gradient(circle at var(--mouse-x, 50%) var(--mouse-y, 50%), rgba(255, 255, 255, 0.06), transparent 40%);
-            opacity: 0;
-            transition: opacity 0.3s ease;
-        }
-        .card:hover::before {
-            opacity: 1;
+            transform: translateY(-10px);
+            box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.4);
+            border-color: var(--accent-color);
         }
         .tag {
             background-color: rgba(56, 189, 248, 0.1);
@@ -66,247 +87,193 @@
             font-weight: 600;
         }
         .filter-btn {
-            background-color: #21262d;
+            background-color: #1e293b;
             border: 1px solid var(--border-color);
             color: var(--primary-text);
             transition: all 0.2s ease;
         }
         .filter-btn:hover {
-            background-color: #30363d;
+            background-color: #334155;
             border-color: var(--accent-color);
         }
         .filter-btn.active {
-            background-color: var(--accent-color);
-            color: #0d1117;
-            border-color: var(--accent-color);
-        }
-        .project-card {
-            transition: all 0.4s ease-in-out;
-        }
-        .project-card.hidden {
-            transform: scale(0.9);
-            opacity: 0;
-            height: 0;
-            padding: 0;
-            margin: 0;
-            overflow: hidden;
-            border: none;
-        }
-        .typing-cursor {
-            display: inline-block;
-            width: 3px;
-            height: 1em;
-            background: var(--accent-color);
-            animation: blink 1s infinite;
-            margin-left: 5px;
-            vertical-align: middle;
-            border-radius: 2px;
-        }
-        @keyframes blink {
-            0%, 100% { opacity: 1; }
-            50% { opacity: 0; }
-        }
-        .glassmorphism {
-            background: rgba(13, 17, 23, 0.7);
-            backdrop-filter: blur(10px);
-            -webkit-backdrop-filter: blur(10px);
-            border-bottom: 1px solid rgba(48, 54, 61, 0.5);
-        }
-        .animated-section {
-            opacity: 0;
-            transform: translateY(30px);
-            transition: opacity 0.6s ease-out, transform 0.6s ease-out;
-        }
-        .animated-section.visible {
-            opacity: 1;
-            transform: translateY(0);
+            background: var(--accent-gradient);
+            color: white;
+            border-color: transparent;
         }
         .skill-pill {
-            background-color: #21262d;
-            border: 1px solid #30363d;
-            color: #c9d1d9;
-            padding: 0.3rem 0.8rem;
+            background-color: #1e293b;
+            border: 1px solid #334155;
+            color: #cbd5e1;
+            padding: 0.5rem 1rem;
             border-radius: 0.5rem;
             font-size: 0.9rem;
             transition: all 0.2s ease;
-            display: inline-block;
+            display: inline-flex;
+            align-items: center;
+            gap: 0.5rem;
         }
         .skill-pill:hover {
             background-color: var(--accent-color);
             color: var(--bg-color);
             border-color: var(--accent-color);
-            transform: translateY(-2px);
+            transform: translateY(-3px) scale(1.05);
+            box-shadow: 0 4px 6px rgba(56, 189, 248, 0.2);
+        }
+        .timeline::before {
+            content: '';
+            position: absolute;
+            left: 11px; /* (24px width of dot / 2) - (2px width of line / 2) = 11px */
+            top: 0;
+            bottom: 0;
+            width: 2px;
+            background-color: var(--border-color);
+        }
+        .timeline-item-dot {
+            position: absolute;
+            left: 0;
+            top: 5px;
+            height: 24px;
+            width: 24px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            background-color: var(--accent-color);
+            border-radius: 9999px;
+            border: 4px solid var(--card-bg);
+            z-index: 1;
         }
     </style>
 </head>
 <body class="antialiased">
-
+    <canvas id="particle-background"></canvas>
     <!-- Header & Navigation -->
     <header class="fixed top-0 left-0 right-0 z-50 glassmorphism">
         <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
             <div class="flex items-center justify-between h-16">
                 <div class="flex-shrink-0">
-                    <a href="#" class="text-2xl font-bold text-white">Nikita Kumari</a>
+                    <a href="#" class="text-2xl font-bold text-white tracking-wider">NK.</a>
                 </div>
                 <div class="hidden md:block">
                     <div class="ml-10 flex items-baseline space-x-4">
-                        <a href="#about" class="text-gray-300 hover:text-white px-3 py-2 rounded-md text-sm font-medium">About</a>
-                        <a href="#skills" class="text-gray-300 hover:text-white px-3 py-2 rounded-md text-sm font-medium">Skills</a>
-                        <a href="#projects" class="text-gray-300 hover:text-white px-3 py-2 rounded-md text-sm font-medium">Projects</a>
-                        <a href="#experience" class="text-gray-300 hover:text-white px-3 py-2 rounded-md text-sm font-medium">Experience</a>
-                        <a href="#education" class="text-gray-300 hover:text-white px-3 py-2 rounded-md text-sm font-medium">Education</a>
-                        <a href="#contact" class="text-gray-300 hover:text-white px-3 py-2 rounded-md text-sm font-medium">Contact</a>
+                        <a href="#about" class="text-gray-300 hover:text-white px-3 py-2 rounded-md text-sm font-medium transition-colors">About</a>
+                        <a href="#skills" class="text-gray-300 hover:text-white px-3 py-2 rounded-md text-sm font-medium transition-colors">Skills</a>
+                        <a href="#projects" class="text-gray-300 hover:text-white px-3 py-2 rounded-md text-sm font-medium transition-colors">Projects</a>
+                        <a href="#experience" class="text-gray-300 hover:text-white px-3 py-2 rounded-md text-sm font-medium transition-colors">Experience</a>
+                        <a href="#education" class="text-gray-300 hover:text-white px-3 py-2 rounded-md text-sm font-medium transition-colors">Education</a>
+                        <a href="#contact" class="text-gray-300 hover:text-white px-3 py-2 rounded-md text-sm font-medium transition-colors">Contact</a>
                     </div>
                 </div>
             </div>
         </div>
     </header>
 
-    <main>
+    <main class="relative z-10">
         <!-- Hero Section -->
-        <section id="hero" class="min-h-screen flex items-center justify-center text-center px-4">
-            <div>
-                <h1 class="text-5xl md:text-7xl font-bold text-white">
-                    Hi, I'm Nikita Kumari
+        <section id="hero" class="min-h-screen flex items-center justify-center text-center px-4 relative overflow-hidden">
+            <div id="globe-container"></div>
+            <div class="relative z-10">
+                <h1 class="text-5xl md:text-7xl lg:text-8xl font-black text-white leading-tight">
+                    Nikita Kumari
                 </h1>
-                <h2 class="text-3xl md:text-5xl font-semibold mt-4 h-16">
-                    <span class="text-gradient" id="typing-text"></span><span class="typing-cursor"></span>
+                <h2 class="text-3xl md:text-5xl font-semibold mt-4 text-gradient">
+                    Data Scientist & ML Engineer
                 </h2>
-                <p class="mt-6 max-w-2xl mx-auto text-lg text-gray-400">
-                    I transform data into intelligent insights. I'm a data scientist specializing in machine learning and cloud technologies, with a passion for building solutions that drive business value.
+                <p class="mt-6 max-w-2xl mx-auto text-lg text-slate-300">
+                    Transforming complex data into intelligent, actionable insights. Passionate about building scalable machine learning solutions on the cloud.
                 </p>
-                <div class="mt-8 flex justify-center gap-4">
-                    <a href="#projects" class="bg-sky-500 text-white font-semibold py-3 px-6 rounded-lg hover:bg-sky-600 transition-all duration-300 transform hover:scale-105">
-                        View My Work
+                <div class="mt-10 flex justify-center gap-4">
+                    <a href="#projects" class="bg-sky-500 text-white font-semibold py-3 px-8 rounded-lg hover:bg-sky-600 transition-all duration-300 transform hover:scale-105 shadow-lg shadow-sky-500/20">
+                        View Projects
                     </a>
-                    <a href="#" class="bg-gray-700 text-white font-semibold py-3 px-6 rounded-lg hover:bg-gray-600 transition-all duration-300 transform hover:scale-105">
-                        Download Resume
+                    <a href="#" class="bg-slate-700 text-white font-semibold py-3 px-8 rounded-lg hover:bg-slate-600 transition-all duration-300 transform hover:scale-105">
+                        Download CV
                     </a>
                 </div>
-                 <div class="mt-10 flex justify-center space-x-6">
-                    <a href="https://github.com/nikitakumari2" target="_blank" rel="noopener noreferrer" class="text-gray-400 hover:text-white transition-colors"><svg class="w-7 h-7" fill="currentColor" viewBox="0 0 24 24"><path d="M12 0C5.37 0 0 5.37 0 12c0 5.3 3.438 9.8 8.207 11.387.6.11.793-.26.793-.577v-2.234c-3.338.726-4.033-1.416-4.033-1.416-.546-1.387-1.333-1.756-1.333-1.756-1.089-.745.083-.729.083-.729 1.205.085 1.839 1.237 1.839 1.237 1.07 1.834 2.807 1.304 3.492.997.107-.775.418-1.305.762-1.604-2.665-.305-5.467-1.334-5.467-5.931 0-1.311.469-2.381 1.236-3.221-.124-.303-.535-1.524.117-3.176 0 0 1.008-.322 3.301 1.23A11.509 11.509 0 0112 5.803c1.02.005 2.047.138 3.006.404 2.291-1.552 3.297-1.23 3.297-1.23.653 1.653.242 2.874.118 3.176.77.84 1.235 1.91 1.235 3.221 0 4.609-2.807 5.624-5.479 5.921.43.372.823 1.102.823 2.222v3.293c0 .319.192.694.801.576C20.565 21.795 24 17.295 24 12 24 5.37 18.627 0 12 0z"/></svg></a>
-                    <a href="https://www.linkedin.com/in/nikitakumari2/" target="_blank" rel="noopener noreferrer" class="text-gray-400 hover:text-white transition-colors"><svg class="w-7 h-7" fill="currentColor" viewBox="0 0 24 24"><path d="M19 0h-14c-2.761 0-5 2.239-5 5v14c0 2.761 2.239 5 5 5h14c2.762 0 5-2.239 5-5v-14c0-2.761-2.238-5-5-5zm-11 19h-3v-11h3v11zm-1.5-12.268c-.966 0-1.75-.784-1.75-1.75s.784-1.75 1.75-1.75 1.75.784 1.75 1.75-.784 1.75-1.75 1.75zm13.5 12.268h-3v-5.604c0-3.368-4-3.113-4 0v5.604h-3v-11h3v1.765c1.396-2.586 7-2.777 7 2.476v6.759z"/></svg></a>
+                 <div class="mt-12 flex justify-center space-x-6">
+                    <a href="https://github.com/nikitakumari2" target="_blank" rel="noopener noreferrer" class="text-slate-400 hover:text-white transition-colors transform hover:scale-110"><svg class="w-8 h-8" fill="currentColor" viewBox="0 0 24 24"><path d="M12 0C5.37 0 0 5.37 0 12c0 5.3 3.438 9.8 8.207 11.387.6.11.793-.26.793-.577v-2.234c-3.338.726-4.033-1.416-4.033-1.416-.546-1.387-1.333-1.756-1.333-1.756-1.089-.745.083-.729.083-.729 1.205.085 1.839 1.237 1.839 1.237 1.07 1.834 2.807 1.304 3.492.997.107-.775.418-1.305.762-1.604-2.665-.305-5.467-1.334-5.467-5.931 0-1.311.469-2.381 1.236-3.221-.124-.303-.535-1.524.117-3.176 0 0 1.008-.322 3.301 1.23A11.509 11.509 0 0112 5.803c1.02.005 2.047.138 3.006.404 2.291-1.552 3.297-1.23 3.297-1.23.653 1.653.242 2.874.118 3.176.77.84 1.235 1.91 1.235 3.221 0 4.609-2.807 5.624-5.479 5.921.43.372.823 1.102.823 2.222v3.293c0 .319.192.694.801.576C20.565 21.795 24 17.295 24 12 24 5.37 18.627 0 12 0z"/></svg></a>
+                    <a href="https://www.linkedin.com/in/nikitakumari2/" target="_blank" rel="noopener noreferrer" class="text-slate-400 hover:text-white transition-colors transform hover:scale-110"><svg class="w-8 h-8" fill="currentColor" viewBox="0 0 24 24"><path d="M19 0h-14c-2.761 0-5 2.239-5 5v14c0 2.761 2.239 5 5 5h14c2.762 0 5-2.239 5-5v-14c0-2.761-2.238-5-5-5zm-11 19h-3v-11h3v11zm-1.5-12.268c-.966 0-1.75-.784-1.75-1.75s.784-1.75 1.75-1.75 1.75.784 1.75 1.75-.784 1.75-1.75 1.75zm13.5 12.268h-3v-5.604c0-3.368-4-3.113-4 0v5.604h-3v-11h3v1.765c1.396-2.586 7-2.777 7 2.476v6.759z"/></svg></a>
                  </div>
             </div>
         </section>
 
         <!-- About Section -->
-        <section id="about" class="py-20 sm:py-32 animated-section">
-            <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-                <div class="text-center">
-                    <h2 class="text-3xl font-bold text-white">About Me</h2>
-                </div>
-                <div class="mt-8 text-center max-w-3xl mx-auto">
-                    <p class="text-lg text-gray-400">
-                        I’m a data scientist who began as a life sciences student fascinated by data’s hidden stories. Trained to ask revealing questions through biology, I now use Python and machine learning to find answers, whether untangling disease patterns, spotting financial fraud, or decoding messy research data. I build tools that help others hear what the data is whispering.                    </p>
-                    <p class="mt-4 text-lg text-gray-400">
-                        I specialize in the end-to-end machine learning lifecycle, from data ingestion and EDA to model deployment and monitoring. I'm proficient in Python and its data science ecosystem, and I'm always excited to learn new technologies to solve complex problems.
-                    </p>
-                </div>
+        <section id="about" class="py-24 sm:py-32">
+            <div class="max-w-3xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
+                <h2 class="text-3xl sm:text-4xl font-bold text-white">About Me</h2>
+                <p class="mt-6 text-lg text-slate-300">
+                    I’m a data scientist who began as a life sciences student fascinated by data’s hidden stories. Trained to ask revealing questions through biology, I now use Python and machine learning to find answers, whether untangling disease patterns, spotting financial fraud, or decoding messy research data. I build tools that help others hear what the data is whispering.
+                </p>
+                <p class="mt-4 text-lg text-slate-300">
+                    I specialize in the end-to-end machine learning lifecycle, from data ingestion and EDA to model deployment and monitoring. I'm proficient in Python and its data science ecosystem, and I'm always excited to learn new technologies to solve complex problems.
+                </p>
             </div>
         </section>
 
         <!-- Skills Section -->
-        <section id="skills" class="py-20 sm:py-32 bg-black bg-opacity-20 animated-section">
+        <section id="skills" class="py-24 sm:py-32 bg-slate-900/70">
             <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
                 <div class="text-center">
-                    <h2 class="text-3xl font-bold text-white">Technical Skills</h2>
+                    <h2 class="text-3xl sm:text-4xl font-bold text-white">Technical Arsenal</h2>
+                    <p class="mt-4 text-lg text-slate-400 max-w-3xl mx-auto">A collection of the tools and technologies I use to turn data into value.</p>
                 </div>
-                <div class="mt-12 grid grid-cols-1 md:grid-cols-2 gap-8">
-                    <!-- Programming Languages -->
-                    <div class="bg-gray-800/50 p-6 rounded-lg border border-gray-700/50">
-                        <div class="flex items-center mb-4">
-                            <svg class="w-7 h-7 text-sky-400 mr-4" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" d="M6.75 7.5l3 2.25-3 2.25m4.5 0h3m-9 8.25h13.5A2.25 2.25 0 0021 18V6a2.25 2.25 0 00-2.25-2.25H5.25A2.25 2.25 0 003 6v12a2.25 2.25 0 002.25 2.25z" /></svg>
-                            <h3 class="font-bold text-xl text-white">Programming & Libraries</h3>
-                        </div>
-                        <div class="flex flex-wrap gap-2">
-                            <span class="skill-pill">Python</span><span class="skill-pill">Pandas</span><span class="skill-pill">NumPy</span><span class="skill-pill">Scikit-learn</span><span class="skill-pill">Matplotlib</span><span class="skill-pill">Seaborn</span><span class="skill-pill">XGBoost</span><span class="skill-pill">PyTorch</span><span class="skill-pill">SQL</span><span class="skill-pill">R</span><span class="skill-pill">NLTK</span><span class="skill-pill">LangChain</span><span class="skill-pill">NLP</span>
-                        </div>
-                    </div>
-                    <!-- Frameworks & Tools -->
-                    <div class="bg-gray-800/50 p-6 rounded-lg border border-gray-700/50">
-                        <div class="flex items-center mb-4">
-                            <svg class="w-7 h-7 text-sky-400 mr-4" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" d="M3.75 3v11.25A2.25 2.25 0 006 16.5h2.25M3.75 3h-1.5m1.5 0h16.5m0 0h1.5m-1.5 0v11.25A2.25 2.25 0 0118 16.5h-2.25m-7.5 0h7.5m-7.5 0l-1 3m1-3l1 3m0 0l.5 1.5m-.5-1.5h-5.5m0 0l-.5 1.5m.5-1.5l-1-3m1 3l1-3m9-11.25v11.25c0 1.242-.93 2.25-2.083 2.25H6.083A2.083 2.083 0 014 14.25V3.75z" /></svg>
-                            <h3 class="font-bold text-xl text-white">Frameworks & Tools</h3>
-                        </div>
-                        <div class="flex flex-wrap gap-2">
-                           <span class="skill-pill">PySpark</span><span class="skill-pill">Docker</span><span class="skill-pill">Spark</span><span class="skill-pill">Databricks</span><span class="skill-pill">Git</span><span class="skill-pill">A/B Testing</span><span class="skill-pill">Tableau</span><span class="skill-pill">Power BI</span><span class="skill-pill">Amazon SageMaker</span>
-                        </div>
-                    </div>
-                    <!-- Databases -->
-                    <div class="bg-gray-800/50 p-6 rounded-lg border border-gray-700/50">
-                        <div class="flex items-center mb-4">
-                            <svg class="w-7 h-7 text-sky-400 mr-4" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" d="M20.25 6.375c0 2.278-3.694 4.125-8.25 4.125S3.75 8.653 3.75 6.375m16.5 0c0-2.278-3.694-4.125-8.25-4.125S3.75 4.097 3.75 6.375m16.5 0v11.25c0 2.278-3.694 4.125-8.25 4.125s-8.25-1.847-8.25-4.125V6.375" /></svg>
-                            <h3 class="font-bold text-xl text-white">Databases</h3>
-                        </div>
-                        <div class="flex flex-wrap gap-2">
-                            <span class="skill-pill">MySQL</span><span class="skill-pill">MongoDB</span><span class="skill-pill">Azure Data Studio</span>
-                        </div>
-                    </div>
-                    <!-- Certifications -->
-                    <div class="bg-gray-800/50 p-6 rounded-lg border border-gray-700/50">
-                        <div class="flex items-center mb-4">
-                            <svg class="w-7 h-7 text-sky-400 mr-4" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" d="M9 12.75L11.25 15 15 9.75M21 12a9 9 0 11-18 0 9 9 0 0118 0z" /></svg>
-                            <h3 class="font-bold text-xl text-white">Certifications</h3>
-                        </div>
-                        <div class="flex flex-wrap gap-2">
-                            <span class="skill-pill">AWS Certifications</span><span class="skill-pill">Google Data Analytics</span><span class="skill-pill">Power BI for Analysts</span><span class="skill-pill">Business Analysis Foundation</span>
-                        </div>
+                <div class="mt-16">
+                    <div class="flex flex-wrap justify-center gap-4">
+                        <span class="skill-pill">Python</span><span class="skill-pill">Pandas</span><span class="skill-pill">NumPy</span><span class="skill-pill">Scikit-learn</span><span class="skill-pill">Matplotlib</span><span class="skill-pill">Seaborn</span><span class="skill-pill">XGBoost</span><span class="skill-pill">PyTorch</span><span class="skill-pill">SQL</span><span class="skill-pill">R</span><span class="skill-pill">NLTK</span><span class="skill-pill">LangChain</span><span class="skill-pill">NLP</span><span class="skill-pill">PySpark</span><span class="skill-pill">Docker</span><span class="skill-pill">Spark</span><span class="skill-pill">Databricks</span><span class="skill-pill">Git</span><span class="skill-pill">A/B Testing</span><span class="skill-pill">Tableau</span><span class="skill-pill">Power BI</span><span class="skill-pill">Amazon SageMaker</span><span class="skill-pill">MySQL</span><span class="skill-pill">MongoDB</span><span class="skill-pill">Azure Data Studio</span><span class="skill-pill">AWS Certifications</span><span class="skill-pill">Google Data Analytics</span>
                     </div>
                 </div>
             </div>
         </section>
         
         <!-- Projects Section -->
-        
-        <section id="projects" class="py-20 sm:py-32 animated-section">
+        <section id="projects" class="py-24 sm:py-32">
             <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
                 <div class="text-center">
-                    <h2 class="text-3xl font-bold text-white">Projects</h2>
-                    <p class="mt-4 text-lg text-gray-400">A selection of my work. Filter by category.</p>
+                    <h2 class="text-3xl sm:text-4xl font-bold text-white">Featured Projects</h2>
+                    <p class="mt-4 text-lg text-slate-400">A selection of my work. Filter by category.</p>
                 </div>
                 
-                <div id="filter-container" class="flex justify-center flex-wrap gap-2 mt-8">
-                    <button class="filter-btn active px-4 py-2 rounded-lg font-semibold" data-filter="all">All</button>
-                    <button class="filter-btn px-4 py-2 rounded-lg font-semibold" data-filter="ml">Machine Learning</button>
-                    <button class="filter-btn px-4 py-2 rounded-lg font-semibold" data-filter="viz">Data Visualization</button>
-                    <button class="filter-btn px-4 py-2 rounded-lg font-semibold" data-filter="nlp">NLP</button>
+                <div id="filter-container" class="flex justify-center flex-wrap gap-3 mt-10">
+                    <button class="filter-btn active px-5 py-2 rounded-lg font-semibold" data-filter="all">All</button>
+                    <button class="filter-btn px-5 py-2 rounded-lg font-semibold" data-filter="ml">Machine Learning</button>
+                    <button class="filter-btn px-5 py-2 rounded-lg font-semibold" data-filter="viz">Data Visualization</button>
+                    <button class="filter-btn px-5 py-2 rounded-lg font-semibold" data-filter="nlp">NLP</button>
                 </div>
 
                 <div id="project-grid" class="mt-12 grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
                     <div class="project-card card" data-category="ml">
-                        <img src="https://placehold.co/600x400/0d1117/38bdf8?text=Churn+Prediction" class="w-full h-48 object-cover" alt="Churn Prediction Project">
+                        <img src="https://placehold.co/600x400/0d1117/38bdf8?text=Churn+Prediction" class="w-full h-52 object-cover" alt="Churn Prediction Project">
                         <div class="p-6">
-                            <div class="flex flex-wrap gap-2 mb-2"><span class="tag">Python</span><span class="tag">Classification</span></div>
+                            <div class="flex flex-wrap gap-2 mb-3"><span class="tag">Python</span><span class="tag">Classification</span></div>
                             <h3 class="text-xl font-bold text-white">Customer Churn Prediction</h3>
-                            <p class="mt-2 text-gray-400">Developed a model using logistic regression to predict customer churn, helping to target retention campaigns effectively.</p>
+                            <p class="mt-2 text-slate-400">Developed a model using logistic regression to predict customer churn, helping to target retention campaigns effectively.</p>
                             <div class="mt-4 flex gap-4"><a href="#" class="font-semibold text-sky-400 hover:underline">GitHub</a><a href="#" class="font-semibold text-sky-400 hover:underline">Case Study</a></div>
                         </div>
                     </div>
                     <div class="project-card card" data-category="viz">
-                        <img src="https://placehold.co/600x400/0d1117/3fb950?text=Sales+Dashboard" class="w-full h-48 object-cover" alt="Sales Dashboard Project">
+                        <img src="https://placehold.co/600x400/0d1117/3fb950?text=Sales+Dashboard" class="w-full h-52 object-cover" alt="Sales Dashboard Project">
                         <div class="p-6">
-                            <div class="flex flex-wrap gap-2 mb-2"><span class="tag">Tableau</span><span class="tag">SQL</span></div>
+                            <div class="flex flex-wrap gap-2 mb-3"><span class="tag">Tableau</span><span class="tag">SQL</span></div>
                             <h3 class="text-xl font-bold text-white">Interactive Sales Dashboard</h3>
-                            <p class="mt-2 text-gray-400">Designed and built a dynamic Tableau dashboard to track KPIs and sales metrics across regions.</p>
+                            <p class="mt-2 text-slate-400">Designed and built a dynamic Tableau dashboard to track KPIs and sales metrics across regions.</p>
                              <div class="mt-4 flex gap-4"><a href="#" class="font-semibold text-sky-400 hover:underline">Live Demo</a></div>
                         </div>
                     </div>
                     <div class="project-card card" data-category="nlp">
-                        <img src="https://placehold.co/600x400/0d1117/a371f7?text=Sentiment+Analysis" class="w-full h-48 object-cover" alt="Sentiment Analysis Project">
+                        <img src="https://placehold.co/600x400/0d1117/a371f7?text=Sentiment+Analysis" class="w-full h-52 object-cover" alt="Sentiment Analysis Project">
                         <div class="p-6">
-                            <div class="flex flex-wrap gap-2 mb-2"><span class="tag">TensorFlow</span><span class="tag">NLP</span></div>
+                            <div class="flex flex-wrap gap-2 mb-3"><span class="tag">TensorFlow</span><span class="tag">NLP</span></div>
                             <h3 class="text-xl font-bold text-white">Review Sentiment Analysis</h3>
-                            <p class="mt-2 text-gray-400">Fine-tuned a BERT model to classify customer reviews, achieving high accuracy in sentiment detection.</p>
+                            <p class="mt-2 text-slate-400">Fine-tuned a BERT model to classify customer reviews, achieving high accuracy in sentiment detection.</p>
                              <div class="mt-4 flex gap-4"><a href="#" class="font-semibold text-sky-400 hover:underline">GitHub</a></div>
                         </div>
                     </div>
                     <div class="project-card card" data-category="ml">
-                        <img src="https://placehold.co/600x400/0d1117/f0883e?text=Forecasting" class="w-full h-48 object-cover" alt="Forecasting Project">
+                        <img src="https://placehold.co/600x400/0d1117/f0883e?text=Forecasting" class="w-full h-52 object-cover" alt="Forecasting Project">
                         <div class="p-6">
-                            <div class="flex flex-wrap gap-2 mb-2"><span class="tag">Python</span><span class="tag">Time Series</span></div>
+                            <div class="flex flex-wrap gap-2 mb-3"><span class="tag">Python</span><span class="tag">Time Series</span></div>
                             <h3 class="text-xl font-bold text-white">Demand Forecasting</h3>
-                            <p class="mt-2 text-gray-400">Created a time series model (SARIMA) to forecast product demand, optimizing inventory management.</p>
+                            <p class="mt-2 text-slate-400">Created a time series model (SARIMA) to forecast product demand, optimizing inventory management.</p>
                             <div class="mt-4 flex gap-4"><a href="#" class="font-semibold text-sky-400 hover:underline">GitHub</a></div>
                         </div>
                     </div>
@@ -315,146 +282,292 @@
         </section>
 
         <!-- Experience Section -->
-        <section id="experience" class="py-20 sm:py-32 animated-section">
-            <div class="max-w-3xl mx-auto px-4 sm:px-6 lg:px-8">
-                <h2 class="text-3xl font-bold text-white text-center">Work Experience</h2>
-                <div class="mt-12 relative border-l-2 border-gray-700">
-                    <div class="mb-10 ml-6">
-                        <span class="absolute flex items-center justify-center w-6 h-6 bg-sky-600 rounded-full -left-3 ring-8 ring-gray-800">
-                            <svg class="w-3 h-3 text-white" fill="currentColor" viewBox="0 0 20 20"><path fill-rule="evenodd" d="M6 2a1 1 0 00-1 1v1H4a2 2 0 00-2 2v10a2 2 0 002 2h12a2 2 0 002-2V6a2 2 0 00-2-2h-1V3a1 1 0 10-2 0v1H7V3a1 1 0 00-1-1zm0 5a1 1 0 000 2h8a1 1 0 100-2H6z" clip-rule="evenodd"></path></svg>
-                        </span>
-                        <h3 class="flex items-center mb-1 text-lg font-semibold text-white">Undergraduate Research Assistant</h3>
-                        <time class="block mb-2 text-sm font-normal leading-none text-gray-500">School of Life Sciences, ASU | Feb 2022 - May 2024</time>
-                        <p class="text-base font-normal text-gray-400">Led the data lifecycle for interdisciplinary life sciences research, from systematic collection/validation of structured datasets and Python (Pandas, NumPy) processing to statistical analysis & Tableau visualization, driving actionable insights for hypothesis validation.</p>
+        <section id="experience" class="py-24 sm:py-32 bg-slate-900/70">
+            <div class="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8">
+                <h2 class="text-3xl sm:text-4xl font-bold text-white text-center mb-16">Work Experience</h2>
+                <div class="relative timeline">
+                    <div class="timeline-item mb-12 pl-10">
+                        <div class="timeline-item-dot">
+                            <svg class="w-4 h-4 text-slate-900" fill="currentColor" viewBox="0 0 20 20"><path fill-rule="evenodd" d="M6 2a2 2 0 00-2 2v8a2 2 0 002 2h8a2 2 0 002-2V4a2 2 0 00-2-2H6zm1 4a1 1 0 100 2h6a1 1 0 100-2H7z" clip-rule="evenodd"></path></svg>
+                        </div>
+                        <div class="card p-6">
+                            <h3 class="flex items-center mb-1 text-lg font-semibold text-white">Undergraduate Research Assistant</h3>
+                            <time class="block mb-2 text-sm font-normal leading-none text-slate-400">School of Life Sciences, ASU | Feb 2022 - May 2024</time>
+                            <p class="text-base font-normal text-slate-300">Led the data lifecycle for interdisciplinary life sciences research, from systematic collection/validation to statistical analysis & Tableau visualization.</p>
+                        </div>
                     </div>
-                    <div class="mb-10 ml-6">
-                        <span class="absolute flex items-center justify-center w-6 h-6 bg-sky-600 rounded-full -left-3 ring-8 ring-gray-800">
-                            <svg class="w-3 h-3 text-white" fill="currentColor" viewBox="0 0 20 20"><path fill-rule="evenodd" d="M6 2a1 1 0 00-1 1v1H4a2 2 0 00-2 2v10a2 2 0 002 2h12a2 2 0 002-2V6a2 2 0 00-2-2h-1V3a1 1 0 10-2 0v1H7V3a1 1 0 00-1-1zm0 5a1 1 0 000 2h8a1 1 0 100-2H6z" clip-rule="evenodd"></path></svg>
-                        </span>
-                        <h3 class="mb-1 text-lg font-semibold text-white">CHM 101 Teaching Assistant</h3>
-                        <time class="block mb-2 text-sm font-normal leading-none text-gray-500">School of Molecular Sciences, ASU | Aug 2022 - Dec 2023</time>
-                        <p class="text-base font-normal text-gray-400">Implemented interactive lab sessions for 75+ students, fostering engagement and improving comprehension of core chemistry concepts, as reflected by an 85% average satisfaction rating in feedback surveys.</p>
+                    <div class="timeline-item pl-10">
+                        <div class="timeline-item-dot">
+                           <svg class="w-4 h-4 text-slate-900" fill="currentColor" viewBox="0 0 20 20"><path fill-rule="evenodd" d="M6 2a2 2 0 00-2 2v8a2 2 0 002 2h8a2 2 0 002-2V4a2 2 0 00-2-2H6zm1 4a1 1 0 100 2h6a1 1 0 100-2H7z" clip-rule="evenodd"></path></svg>
+                        </div>
+                        <div class="card p-6">
+                            <h3 class="mb-1 text-lg font-semibold text-white">CHM 101 Teaching Assistant</h3>
+                            <time class="block mb-2 text-sm font-normal leading-none text-slate-400">School of Molecular Sciences, ASU | Aug 2022 - Dec 2023</time>
+                            <p class="text-base font-normal text-slate-300">Implemented interactive lab sessions for 75+ students, improving comprehension of core chemistry concepts.</p>
+                        </div>
                     </div>
                 </div>
             </div>
         </section>
-        
+
         <!-- Education Section -->
-        <section id="education" class="py-20 sm:py-32 bg-black bg-opacity-20 animated-section">
-            <div class="max-w-3xl mx-auto px-4 sm:px-6 lg:px-8">
-                <h2 class="text-3xl font-bold text-white text-center">Education</h2>
-                <div class="mt-12 relative border-l-2 border-gray-700">
-                    <div class="mb-10 ml-6">
-                        <span class="absolute flex items-center justify-center w-6 h-6 bg-sky-600 rounded-full -left-3 ring-8 ring-gray-800">
-                             <svg class="w-3 h-3 text-white" fill="currentColor" viewBox="0 0 20 20"><path d="M10.394 2.08a1 1 0 00-.788 0l-7 3a1 1 0 000 1.84L5.25 8.051a.999.999 0 011.07-.052l1.885-1.031a1 1 0 00.49-.868V3.73a1 1 0 00-.5-1.912l-1.313-.715a1 1 0 00-1.172.053L3 3.421a1 1 0 00-.5.868v3.451l-1.314.715a1 1 0 00-.49.868v2.403a1 1 0 00.49.868l1.313.715a1 1 0 001.172-.053l2.25-1.226a1 1 0 011.07.052l2.25 1.226a1 1 0 001.172-.053l1.313-.715a1 1 0 00.49-.868V9.132a1 1 0 00-.49-.868l-1.313-.715a1 1 0 00-1.172.053L8.75 8.051a.999.999 0 01-1.07-.052L5 6.579V4.587l2.25-1.226a1 1 0 011.07.052l2.25 1.226V6.58a1 1 0 00.49.868l1.313.715a1 1 0 001.172-.053l2.25-1.226a1 1 0 011.07.052l2.25 1.226a1 1 0 001.172-.053l1.313-.715a1 1 0 00.49-.868V6.868a1 1 0 00-.49-.868l-7-3zM12 10.394a1 1 0 00-1.172.053l-2.25 1.226a1 1 0 01-1.07-.052L5.25 10.394a1 1 0 00-1.172.053l-1.313.715a1 1 0 00-.49.868v2.403a1 1 0 00.49.868l1.313.715a1 1 0 001.172-.053l2.25-1.226a1 1 0 011.07.052l2.25 1.226a1 1 0 001.172-.053l1.313-.715a1 1 0 00.49-.868v-2.403a1 1 0 00-.49-.868l-1.313-.715a1 1 0 00-1.172.053L12 10.394z"></path></svg>
-                        </span>
-                        <h3 class="flex items-center mb-1 text-lg font-semibold text-white">M.S. Data Science, Analytics, and Engineering <span class="bg-sky-100 text-sky-800 text-sm font-medium mr-2 px-2.5 py-0.5 rounded dark:bg-sky-900 dark:text-sky-300 ml-3">Present</span></h3>
-                        <time class="block mb-2 text-sm font-normal leading-none text-gray-500">Arizona State University, Tempe, AZ | Aug 2024 - May 2026</time>
-                        <p class="text-base font-normal text-gray-400">Concentration in Computing and Decision Analytics.</p>
+        <section id="education" class="py-24 sm:py-32">
+            <div class="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8">
+                <h2 class="text-3xl sm:text-4xl font-bold text-white text-center mb-16">Education</h2>
+                <div class="relative timeline">
+                    <div class="timeline-item mb-12 pl-10">
+                        <div class="timeline-item-dot">
+                            <svg class="w-4 h-4 text-slate-900" fill="currentColor" viewBox="0 0 20 20"><path d="M10.394 2.08a1 1 0 00-.788 0l-7 3a1 1 0 000 1.84L5.25 8.051a.999.999 0 011.07-.052l1.885-1.031a1 1 0 00.49-.868V3.73a1 1 0 00-.5-1.912l-1.313-.715a1 1 0 00-1.172.053L3 3.421a1 1 0 00-.5.868v3.451l-1.314.715a1 1 0 00-.49.868v2.403a1 1 0 00.49.868l1.313.715a1 1 0 001.172-.053l2.25-1.226a1 1 0 011.07.052l2.25 1.226a1 1 0 001.172-.053l1.313-.715a1 1 0 00.49-.868V9.132a1 1 0 00-.49-.868l-1.313-.715a1 1 0 00-1.172.053L8.75 8.051a.999.999 0 01-1.07-.052L5 6.579V4.587l2.25-1.226a1 1 0 011.07.052l2.25 1.226V6.58a1 1 0 00.49.868l1.313.715a1 1 0 001.172-.053l2.25-1.226a1 1 0 011.07.052l2.25 1.226a1 1 0 001.172-.053l1.313-.715a1 1 0 00.49-.868V6.868a1 1 0 00-.49-.868l-7-3zM12 10.394a1 1 0 00-1.172.053l-2.25 1.226a1 1 0 01-1.07-.052L5.25 10.394a1 1 0 00-1.172.053l-1.313.715a1 1 0 00-.49.868v2.403a1 1 0 00.49.868l1.313.715a1 1 0 001.172-.053l2.25-1.226a1 1 0 011.07.052l2.25 1.226a1 1 0 001.172-.053l1.313-.715a1 1 0 00.49-.868v-2.403a1 1 0 00-.49-.868l-1.313-.715a1 1 0 00-1.172.053L12 10.394z"></path></svg>
+                        </div>
+                        <div class="card p-6">
+                            <h3 class="flex items-center mb-1 text-lg font-semibold text-white">M.S. Data Science, Analytics, and Engineering</h3>
+                            <time class="block mb-2 text-sm font-normal leading-none text-slate-400">Arizona State University | Aug 2024 - May 2026</time>
+                            <p class="text-base font-normal text-slate-300">Concentration in Computing and Decision Analytics.</p>
+                        </div>
                     </div>
-                    <div class="mb-10 ml-6">
-                        <span class="absolute flex items-center justify-center w-6 h-6 bg-sky-600 rounded-full -left-3 ring-8 ring-gray-800">
-                             <svg class="w-3 h-3 text-white" fill="currentColor" viewBox="0 0 20 20"><path d="M10.394 2.08a1 1 0 00-.788 0l-7 3a1 1 0 000 1.84L5.25 8.051a.999.999 0 011.07-.052l1.885-1.031a1 1 0 00.49-.868V3.73a1 1 0 00-.5-1.912l-1.313-.715a1 1 0 00-1.172.053L3 3.421a1 1 0 00-.5.868v3.451l-1.314.715a1 1 0 00-.49.868v2.403a1 1 0 00.49.868l1.313.715a1 1 0 001.172-.053l2.25-1.226a1 1 0 011.07.052l2.25 1.226a1 1 0 001.172-.053l1.313-.715a1 1 0 00.49-.868V9.132a1 1 0 00-.49-.868l-1.313-.715a1 1 0 00-1.172.053L8.75 8.051a.999.999 0 01-1.07-.052L5 6.579V4.587l2.25-1.226a1 1 0 011.07.052l2.25 1.226V6.58a1 1 0 00.49.868l1.313.715a1 1 0 001.172-.053l2.25-1.226a1 1 0 011.07.052l2.25 1.226a1 1 0 001.172-.053l1.313-.715a1 1 0 00.49-.868V6.868a1 1 0 00-.49-.868l-7-3zM12 10.394a1 1 0 00-1.172.053l-2.25 1.226a1 1 0 01-1.07-.052L5.25 10.394a1 1 0 00-1.172.053l-1.313.715a1 1 0 00-.49.868v2.403a1 1 0 00.49.868l1.313.715a1 1 0 001.172-.053l2.25-1.226a1 1 0 011.07.052l2.25 1.226a1 1 0 001.172-.053l1.313-.715a1 1 0 00.49-.868v-2.403a1 1 0 00-.49-.868l-1.313-.715a1 1 0 00-1.172.053L12 10.394z"></path></svg>
-                        </span>
-                        <h3 class="mb-1 text-lg font-semibold text-white">B.S. Biological Sciences (Biomedical)</h3>
-                        <time class="block mb-2 text-sm font-normal leading-none text-gray-500">Arizona State University, Tempe, AZ | Aug 2020 - May 2024</time>
-                        <p class="text-base font-normal text-gray-400">Made the Dean's List for all 8 semesters.</p>
+                    <div class="timeline-item pl-10">
+                        <div class="timeline-item-dot">
+                           <svg class="w-4 h-4 text-slate-900" fill="currentColor" viewBox="0 0 20 20"><path d="M10.394 2.08a1 1 0 00-.788 0l-7 3a1 1 0 000 1.84L5.25 8.051a.999.999 0 011.07-.052l1.885-1.031a1 1 0 00.49-.868V3.73a1 1 0 00-.5-1.912l-1.313-.715a1 1 0 00-1.172.053L3 3.421a1 1 0 00-.5.868v3.451l-1.314.715a1 1 0 00-.49.868v2.403a1 1 0 00.49.868l1.313.715a1 1 0 001.172-.053l2.25-1.226a1 1 0 011.07.052l2.25 1.226a1 1 0 001.172-.053l1.313-.715a1 1 0 00.49-.868V9.132a1 1 0 00-.49-.868l-1.313-.715a1 1 0 00-1.172.053L8.75 8.051a.999.999 0 01-1.07-.052L5 6.579V4.587l2.25-1.226a1 1 0 011.07.052l2.25 1.226V6.58a1 1 0 00.49.868l1.313.715a1 1 0 001.172-.053l2.25-1.226a1 1 0 011.07.052l2.25 1.226a1 1 0 001.172-.053l1.313-.715a1 1 0 00.49-.868V6.868a1 1 0 00-.49-.868l-7-3zM12 10.394a1 1 0 00-1.172.053l-2.25 1.226a1 1 0 01-1.07-.052L5.25 10.394a1 1 0 00-1.172.053l-1.313.715a1 1 0 00-.49.868v2.403a1 1 0 00.49.868l1.313.715a1 1 0 001.172-.053l2.25-1.226a1 1 0 011.07.052l2.25 1.226a1 1 0 001.172-.053l1.313-.715a1 1 0 00.49-.868v-2.403a1 1 0 00-.49-.868l-1.313-.715a1 1 0 00-1.172.053L12 10.394z"></path></svg>
+                        </div>
+                        <div class="card p-6">
+                            <h3 class="mb-1 text-lg font-semibold text-white">B.S. Biological Sciences (Biomedical)</h3>
+                            <time class="block mb-2 text-sm font-normal leading-none text-slate-400">Arizona State University | Aug 2020 - May 2024</time>
+                            <p class="text-base font-normal text-slate-300">Graduated with honors, Dean's List all 8 semesters.</p>
+                        </div>
                     </div>
                 </div>
             </div>
         </section>
 
         <!-- Contact Section -->
-        <section id="contact" class="py-20 sm:py-32 animated-section">
-            <div class="text-center max-w-2xl mx-auto">
-                <h2 class="text-3xl font-bold text-white">Get In Touch</h2>
-                <p class="mt-4 text-lg text-gray-400">
-                    I'm always open to discussing new projects, creative ideas, or opportunities to be part of an ambitious team. Feel free to reach out.
+        <section id="contact" class="py-24 sm:py-32">
+            <div class="text-center max-w-2xl mx-auto px-4">
+                <h2 class="text-3xl sm:text-4xl font-bold text-white">Let's Connect</h2>
+                <p class="mt-4 text-lg text-slate-400">
+                    I am actively seeking full-time opportunities and collaborations. If you have a project in mind or just want to discuss the future of data, I'd love to hear from you.
                 </p>
-                <a href="mailto:nikitak.nk11@gmail.com" class="mt-8 inline-block bg-sky-500 text-white font-bold text-lg py-3 px-8 rounded-lg hover:bg-sky-600 transition-all duration-300 transform hover:scale-105">
-                    Say Hello
+                <a href="mailto:nikitak.nk11@gmail.com" class="mt-10 inline-block bg-sky-500 text-white font-bold text-lg py-4 px-10 rounded-lg hover:bg-sky-600 transition-all duration-300 transform hover:scale-105 shadow-lg shadow-sky-500/30">
+                    Get In Touch
                 </a>
             </div>
         </section>
     </main>
 
-    <footer class="border-t border-gray-800 py-6">
-        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 text-center text-gray-500">
-            <p>&copy; 2025 Nikita Kumari. Built with Tailwind CSS.</p>
+    <footer class="border-t border-slate-800 py-8 relative z-10">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 text-center text-slate-500">
+            <p>&copy; 2025 Nikita Kumari. All Rights Reserved.</p>
+            <p class="text-sm mt-2">Designed with 💙 and built with Tailwind CSS & Three.js</p>
         </div>
     </footer>
 
     <script>
         document.addEventListener('DOMContentLoaded', () => {
-            // --- Typing Animation ---
-            const roles = ["Data Scientist", "ML Engineer", "Cloud Enthusiast", "Problem Solver"];
-            let roleIndex = 0;
-            let charIndex = 0;
-            const typingText = document.getElementById('typing-text');
-            function type() {
-                if (charIndex < roles[roleIndex].length) {
-                    typingText.textContent += roles[roleIndex].charAt(charIndex);
-                    charIndex++;
-                    setTimeout(type, 100);
-                } else {
-                    setTimeout(erase, 2000);
+            // --- GSAP & ScrollTrigger Setup ---
+            gsap.registerPlugin(ScrollTrigger);
+
+            // --- Interactive Particle Background ---
+            const canvas = document.getElementById('particle-background');
+            const ctx = canvas.getContext('2d');
+            canvas.width = window.innerWidth;
+            canvas.height = window.innerHeight;
+
+            let particlesArray;
+
+            const mouse = {
+                x: null,
+                y: null,
+                radius: (canvas.height / 100) * (canvas.width / 100)
+            };
+
+            window.addEventListener('mousemove', (event) => {
+                mouse.x = event.x;
+                mouse.y = event.y;
+            });
+            
+            class Particle {
+                constructor(x, y, directionX, directionY, size, color) {
+                    this.x = x;
+                    this.y = y;
+                    this.directionX = directionX;
+                    this.directionY = directionY;
+                    this.size = size;
+                    this.color = color;
+                }
+                draw() {
+                    ctx.beginPath();
+                    ctx.arc(this.x, this.y, this.size, 0, Math.PI * 2, false);
+                    ctx.fillStyle = this.color;
+                    ctx.fill();
+                }
+                update() {
+                    if (this.x > canvas.width || this.x < 0) {
+                        this.directionX = -this.directionX;
+                    }
+                    if (this.y > canvas.height || this.y < 0) {
+                        this.directionY = -this.directionY;
+                    }
+                    let dx = mouse.x - this.x;
+                    let dy = mouse.y - this.y;
+                    let distance = Math.sqrt(dx * dx + dy * dy);
+                    if (distance < mouse.radius + this.size) {
+                        if (mouse.x < this.x && this.x < canvas.width - this.size * 10) { this.x += 3; }
+                        if (mouse.x > this.x && this.x > this.size * 10) { this.x -= 3; }
+                        if (mouse.y < this.y && this.y < canvas.height - this.size * 10) { this.y += 3; }
+                        if (mouse.y > this.y && this.y > this.size * 10) { this.y -= 3; }
+                    }
+                    this.x += this.directionX;
+                    this.y += this.directionY;
+                    this.draw();
                 }
             }
-            function erase() {
-                if (charIndex > 0) {
-                    typingText.textContent = roles[roleIndex].substring(0, charIndex - 1);
-                    charIndex--;
-                    setTimeout(erase, 50);
-                } else {
-                    roleIndex = (roleIndex + 1) % roles.length;
-                    setTimeout(type, 500);
+
+            function initParticles() {
+                particlesArray = [];
+                let numberOfParticles = (canvas.height * canvas.width) / 9000;
+                const colors = ['#38bdf8', '#818cf8', '#e2e8f0'];
+                for (let i = 0; i < numberOfParticles; i++) {
+                    let size = (Math.random() * 2.5) + 1;
+                    let x = (Math.random() * ((innerWidth - size * 2) - (size * 2)) + size * 2);
+                    let y = (Math.random() * ((innerHeight - size * 2) - (size * 2)) + size * 2);
+                    let directionX = (Math.random() * 0.4) - 0.2;
+                    let directionY = (Math.random() * 0.4) - 0.2;
+                    let color = colors[Math.floor(Math.random() * colors.length)];
+                    particlesArray.push(new Particle(x, y, directionX, directionY, size, color));
                 }
             }
-            type();
+
+            function connect() {
+                let opacityValue = 1;
+                for (let a = 0; a < particlesArray.length; a++) {
+                    for (let b = a; b < particlesArray.length; b++) {
+                        let distance = ((particlesArray[a].x - particlesArray[b].x) * (particlesArray[a].x - particlesArray[b].x))
+                                     + ((particlesArray[a].y - particlesArray[b].y) * (particlesArray[a].y - particlesArray[b].y));
+                        if (distance < (canvas.width/7) * (canvas.height/7)) {
+                            opacityValue = 1 - (distance/20000);
+                            ctx.strokeStyle = `rgba(148, 163, 184, ${opacityValue})`;
+                            ctx.lineWidth = 1;
+                            ctx.beginPath();
+                            ctx.moveTo(particlesArray[a].x, particlesArray[a].y);
+                            ctx.lineTo(particlesArray[b].x, particlesArray[b].y);
+                            ctx.stroke();
+                        }
+                    }
+                }
+            }
+
+            function animateParticles() {
+                requestAnimationFrame(animateParticles);
+                ctx.clearRect(0, 0, innerWidth, innerHeight);
+                for (let i = 0; i < particlesArray.length; i++) {
+                    particlesArray[i].update();
+                }
+                connect();
+            }
+            
+            initParticles();
+            animateParticles();
+
+            window.addEventListener('resize', () => {
+                canvas.width = innerWidth;
+                canvas.height = innerHeight;
+                mouse.radius = (canvas.height / 100) * (canvas.width / 100);
+                initParticles();
+            });
+
+
+            // --- Interactive Globe ---
+            const container = document.getElementById('globe-container');
+            if (container) {
+                const scene = new THREE.Scene();
+                const camera = new THREE.PerspectiveCamera(75, container.offsetWidth / container.offsetHeight, 0.1, 1000);
+                const renderer = new THREE.WebGLRenderer({ antialias: true, alpha: true });
+                
+                renderer.setSize(container.offsetWidth, container.offsetHeight);
+                renderer.setPixelRatio(window.devicePixelRatio);
+                container.appendChild(renderer.domElement);
+
+                const sphere = new THREE.Mesh(
+                    new THREE.SphereGeometry(5, 50, 50),
+                    new THREE.MeshBasicMaterial({ color: 0x020617, wireframe: true })
+                );
+                scene.add(sphere);
+                
+                camera.position.z = 15;
+
+                function animateGlobe() {
+                    requestAnimationFrame(animateGlobe);
+                    sphere.rotation.y += 0.0005;
+                    sphere.rotation.x += 0.0005;
+                    renderer.render(scene, camera);
+                }
+                animateGlobe();
+                
+                window.addEventListener('resize', () => {
+                    camera.aspect = container.offsetWidth / container.offsetHeight;
+                    camera.updateProjectionMatrix();
+                    renderer.setSize(container.offsetWidth, container.offsetHeight);
+                });
+            }
 
             // --- Project Filtering ---
             const filterContainer = document.getElementById('filter-container');
-            const projectCards = Array.from(document.querySelectorAll('.project-card'));
-            const filterButtons = Array.from(filterContainer.getElementsByClassName('filter-btn'));
-            filterContainer.addEventListener('click', (e) => {
-                if (e.target.tagName !== 'BUTTON') return;
-                const filter = e.target.dataset.filter;
-                filterButtons.forEach(btn => btn.classList.remove('active'));
-                e.target.classList.add('active');
-                projectCards.forEach(card => {
-                    const category = card.dataset.category;
-                    if (filter === 'all' || filter === category) {
-                        card.classList.remove('hidden');
-                    } else {
-                        card.classList.add('hidden');
-                    }
-                });
-            });
+            const projectGrid = document.getElementById('project-grid');
+            if (filterContainer && projectGrid) {
+                const projectCards = Array.from(projectGrid.querySelectorAll('.project-card'));
+                const filterButtons = Array.from(filterContainer.getElementsByClassName('filter-btn'));
+                
+                filterContainer.addEventListener('click', (e) => {
+                    if (e.target.tagName !== 'BUTTON') return;
+                    const filter = e.target.dataset.filter;
+                    
+                    filterButtons.forEach(btn => btn.classList.remove('active'));
+                    e.target.classList.add('active');
 
-            // --- Card Hover Effect ---
-            const cards = document.querySelectorAll('.card');
-            cards.forEach(card => {
-                card.addEventListener('mousemove', (e) => {
-                    const rect = card.getBoundingClientRect();
-                    const x = e.clientX - rect.left;
-                    const y = e.clientY - rect.top;
-                    card.style.setProperty('--mouse-x', `${(x / rect.width) * 100}%`);
-                    card.style.setProperty('--mouse-y', `${(y / rect.height) * 100}%`);
+                    gsap.to(projectCards, {
+                        duration: 0.3,
+                        opacity: 0,
+                        scale: 0.9,
+                        y: 20,
+                        stagger: 0.05,
+                        onComplete: () => {
+                            projectCards.forEach(card => {
+                                const category = card.dataset.category;
+                                const shouldShow = filter === 'all' || filter === category;
+                                card.style.display = shouldShow ? 'block' : 'none';
+                            });
+
+                            gsap.to(projectCards.filter(c => c.style.display === 'block'), {
+                                duration: 0.4,
+                                opacity: 1,
+                                scale: 1,
+                                y: 0,
+                                stagger: 0.05,
+                                delay: 0.1
+                            });
+                        }
+                    });
                 });
-            });
-            
-            // --- Scroll Animations ---
-            const observer = new IntersectionObserver((entries) => {
-                entries.forEach(entry => {
-                    if (entry.isIntersecting) {
-                        entry.target.classList.add('visible');
+            }
+
+            // --- General Scroll Animations ---
+            const sections = document.querySelectorAll('section');
+            sections.forEach((section) => {
+                gsap.fromTo(section.children, 
+                    { autoAlpha: 0, y: 50 }, 
+                    { 
+                        autoAlpha: 1, 
+                        y: 0,
+                        duration: 0.8,
+                        stagger: 0.1,
+                        ease: 'power3.out',
+                        scrollTrigger: {
+                            trigger: section,
+                            start: 'top 85%',
+                            toggleActions: 'play none none none',
+                        }
                     }
-                });
-            }, {
-                threshold: 0.1
+                );
             });
-            const sections = document.querySelectorAll('.animated-section');
-            sections.forEach(section => observer.observe(section));
         });
     </script>
 
