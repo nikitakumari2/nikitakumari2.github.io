@@ -143,6 +143,14 @@
             border: 4px solid var(--card-bg);
             z-index: 1;
         }
+        #typing-cursor {
+            animation: blink 1s infinite;
+            color: var(--accent-color);
+        }
+        @keyframes blink {
+            0%, 50% { opacity: 1; }
+            51%, 100% { opacity: 0; }
+        }
     </style>
 </head>
 <body class="antialiased">
@@ -178,7 +186,7 @@
                     Nikita Kumari
                 </h1>
                 <h2 class="text-3xl md:text-5xl font-semibold mt-4 text-gradient">
-                    Data Scientist & ML Engineer
+                    <span id="typing-text"></span><span id="typing-cursor">|</span>
                 </h2>
                 <p class="mt-6 max-w-2xl mx-auto text-lg text-slate-300">
                     Transforming complex data into intelligent, actionable insights. Passionate about building scalable machine learning solutions on the cloud.
@@ -515,6 +523,22 @@
         document.addEventListener('DOMContentLoaded', () => {
             // --- GSAP & ScrollTrigger Setup ---
             gsap.registerPlugin(ScrollTrigger);
+
+            // --- Typing Effect ---
+            const typingText = document.getElementById('typing-text');
+            const text = "Data Scientist & ML Engineer";
+            let index = 0;
+            
+            function typeText() {
+                if (index < text.length) {
+                    typingText.textContent += text.charAt(index);
+                    index++;
+                    setTimeout(typeText, 100); // Adjust speed here (lower = faster)
+                }
+            }
+            
+            // Start typing effect after a short delay
+            setTimeout(typeText, 1000);
 
             // --- Interactive Particle Background ---
             const canvas = document.getElementById('particle-background');
