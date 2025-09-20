@@ -23,6 +23,16 @@
             --font-heading: 'Space Mono', monospace;
             --font-body: 'Roboto Flex', sans-serif;
         }
+        
+        [data-theme="light"] {
+            --bg-color: #f8fafc; /* Light background */
+            --primary-text: #1e293b; /* Dark text */
+            --secondary-text: #64748b;
+            --border-color: #e2e8f0;
+            --card-bg: #ffffff;
+            --accent-color: #0ea5e9;
+            --accent-gradient: linear-gradient(to right, #0ea5e9, #3b82f6);
+        }
         html {
             scroll-behavior: smooth;
         }
@@ -31,6 +41,7 @@
             background-color: var(--bg-color);
             color: var(--primary-text);
             overflow-x: hidden;
+            transition: background-color 0.3s ease, color 0.3s ease;
         }
         h1, h2, h3, h4, h5, h6 {
             font-family: var(--font-heading);
@@ -77,6 +88,20 @@
             transform: translateY(-10px);
             box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.4);
             border-color: var(--accent-color);
+        }
+        .project-card {
+            transform-style: preserve-3d;
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+        }
+        .project-card:hover {
+            transform: translateY(-10px) rotateX(5deg) rotateY(5deg);
+            box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.4);
+        }
+        .project-card img {
+            transition: transform 0.3s ease;
+        }
+        .project-card:hover img {
+            transform: scale(1.05);
         }
         .tag {
             background-color: rgba(56, 189, 248, 0.1);
@@ -171,6 +196,14 @@
                         <a href="#education" class="text-gray-300 hover:text-white px-3 py-2 rounded-md text-sm font-medium transition-colors">Education</a>
                         <a href="#certifications" class="text-gray-300 hover:text-white px-3 py-2 rounded-md text-sm font-medium transition-colors">Certifications</a>
                         <a href="#contact" class="text-gray-300 hover:text-white px-3 py-2 rounded-md text-sm font-medium transition-colors">Contact</a>
+                        <button id="theme-toggle" class="text-gray-300 hover:text-white p-2 rounded-md transition-colors">
+                            <svg id="sun-icon" class="w-5 h-5" fill="currentColor" viewBox="0 0 20 20">
+                                <path fill-rule="evenodd" d="M10 2a1 1 0 011 1v1a1 1 0 11-2 0V3a1 1 0 011-1zm4 8a4 4 0 11-8 0 4 4 0 018 0zm-.464 4.95l.707.707a1 1 0 001.414-1.414l-.707-.707a1 1 0 00-1.414 1.414zm2.12-10.607a1 1 0 010 1.414l-.706.707a1 1 0 11-1.414-1.414l.707-.707a1 1 0 011.414 0zM17 11a1 1 0 100-2h-1a1 1 0 100 2h1zm-7 4a1 1 0 011 1v1a1 1 0 11-2 0v-1a1 1 0 011-1zM5.05 6.464A1 1 0 106.465 5.05l-.708-.707a1 1 0 00-1.414 1.414l.707.707zm1.414 8.486l-.707.707a1 1 0 01-1.414-1.414l.707-.707a1 1 0 011.414 1.414zM4 11a1 1 0 100-2H3a1 1 0 000 2h1z" clip-rule="evenodd"></path>
+                            </svg>
+                            <svg id="moon-icon" class="w-5 h-5 hidden" fill="currentColor" viewBox="0 0 20 20">
+                                <path d="M17.293 13.293A8 8 0 016.707 2.707a8.001 8.001 0 1010.586 10.586z"></path>
+                            </svg>
+                        </button>
                     </div>
                 </div>
             </div>
@@ -314,7 +347,11 @@
                             <div class="flex flex-wrap gap-2 mb-3"><span class="tag">LangChain</span><span class="tag">Llama 3</span><span class="tag">Hugging Face</span><span class="tag">NLTK</span><span class="tag">RAG</span><span class="tag">ChromaDB</span></div>
                             <h3 class="text-xl font-bold text-white">Medical AI Diagnostic Agent</h3>
                             <p class="mt-2 text-slate-400">This project is an AI-powered agent designed to assist with medical differential diagnosis. It leverages a Retrieval-Augmented Generation (RAG) architecture to provide evidence-based suggestions from a curated medical knowledge base, running entirely on local, open-source models.</p>
-                            <div class="mt-4 flex gap-4"><a href="https://github.com/nikitakumari2/ddx_agent" target="_blank" class="font-semibold text-sky-400 hover:underline">GitHub 🔗</a><a href="https://your-live-demo-url.com" target="_blank" class="font-semibold text-sky-400 hover:underline">Live Demo 🚀</a></div>
+                            <div class="mt-4 flex gap-4">
+                                <a href="https://github.com/nikitakumari2/ddx_agent" target="_blank" class="font-semibold text-sky-400 hover:underline">GitHub 🔗</a>
+                                <a href="https://your-live-demo-url.com" target="_blank" class="font-semibold text-sky-400 hover:underline">Live Demo 🚀</a>
+                                <button class="font-semibold text-sky-400 hover:underline project-details-btn" data-project="ddx">Details 📋</button>
+                            </div>
                         </div>
                     </div>
                     <div class="project-card card" data-category="ml">
@@ -323,7 +360,11 @@
                             <div class="flex flex-wrap gap-2 mb-3"> <span class="tag">Reinforcement Learning</span><span class="tag">A/B Testing</span><span class="tag">Streamlit</span><span class="tag">Python</span></div>
                             <h3 class="text-xl font-bold text-white">Dynamic Promotion Personalization</h3>
                             <p class="mt-2 text-slate-400">An A/B test simulation where a contextual multi-armed bandit learns to personalize marketing offers, achieving a +132% lift in conversions over a static control group.</p>
-                            <div class="mt-4 flex gap-4"><a href="https://github.com/nikitakumari2/promotion_personalization" target="_blank" class="font-semibold text-sky-400 hover:underline">GitHub 🔗</a><a href="https://promotionpersonalization-nikitak.streamlit.app/" target="_blank" class="font-semibold text-sky-400 hover:underline">Live Demo 🚀</a></div>
+                            <div class="mt-4 flex gap-4">
+                                <a href="https://github.com/nikitakumari2/promotion_personalization" target="_blank" class="font-semibold text-sky-400 hover:underline">GitHub 🔗</a>
+                                <a href="https://promotionpersonalization-nikitak.streamlit.app/" target="_blank" class="font-semibold text-sky-400 hover:underline">Live Demo 🚀</a>
+                                <button class="font-semibold text-sky-400 hover:underline project-details-btn" data-project="promotion">Details 📋</button>
+                            </div>
                         </div>
                     </div>
                     <div class="project-card card" data-category="nlp">
@@ -519,6 +560,25 @@
         </div>
     </footer>
 
+    <!-- Project Details Modal -->
+    <div id="project-modal" class="fixed inset-0 bg-black bg-opacity-50 hidden z-50 flex items-center justify-center p-4">
+        <div class="bg-white dark:bg-slate-800 rounded-lg max-w-2xl w-full max-h-[90vh] overflow-y-auto">
+            <div class="p-6">
+                <div class="flex justify-between items-center mb-4">
+                    <h3 id="modal-title" class="text-2xl font-bold text-gray-900 dark:text-white"></h3>
+                    <button id="close-modal" class="text-gray-500 hover:text-gray-700 dark:text-gray-400 dark:hover:text-gray-200">
+                        <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path>
+                        </svg>
+                    </button>
+                </div>
+                <div id="modal-content" class="text-gray-700 dark:text-gray-300">
+                    <!-- Content will be populated by JavaScript -->
+                </div>
+            </div>
+        </div>
+    </div>
+
     <script>
         document.addEventListener('DOMContentLoaded', () => {
             // --- GSAP & ScrollTrigger Setup ---
@@ -539,6 +599,133 @@
             
             // Start typing effect after a short delay
             setTimeout(typeText, 1000);
+
+            // --- Theme Toggle ---
+            const themeToggle = document.getElementById('theme-toggle');
+            const sunIcon = document.getElementById('sun-icon');
+            const moonIcon = document.getElementById('moon-icon');
+            const body = document.body;
+            
+            // Check for saved theme preference or default to dark
+            const currentTheme = localStorage.getItem('theme') || 'dark';
+            body.setAttribute('data-theme', currentTheme);
+            
+            // Update icon visibility based on current theme
+            if (currentTheme === 'light') {
+                sunIcon.classList.add('hidden');
+                moonIcon.classList.remove('hidden');
+            } else {
+                sunIcon.classList.remove('hidden');
+                moonIcon.classList.add('hidden');
+            }
+            
+            themeToggle.addEventListener('click', () => {
+                const currentTheme = body.getAttribute('data-theme');
+                const newTheme = currentTheme === 'dark' ? 'light' : 'dark';
+                
+                body.setAttribute('data-theme', newTheme);
+                localStorage.setItem('theme', newTheme);
+                
+                // Update icon visibility
+                if (newTheme === 'light') {
+                    sunIcon.classList.add('hidden');
+                    moonIcon.classList.remove('hidden');
+                } else {
+                    sunIcon.classList.remove('hidden');
+                    moonIcon.classList.add('hidden');
+                }
+            });
+
+            // --- Project Details Modal ---
+            const modal = document.getElementById('project-modal');
+            const modalTitle = document.getElementById('modal-title');
+            const modalContent = document.getElementById('modal-content');
+            const closeModal = document.getElementById('close-modal');
+            const projectDetailsBtns = document.querySelectorAll('.project-details-btn');
+
+            const projectData = {
+                ddx: {
+                    title: "Medical AI Diagnostic Agent",
+                    content: `
+                        <div class="space-y-4">
+                            <div>
+                                <h4 class="font-semibold text-lg mb-2">Project Overview</h4>
+                                <p>An AI-powered agent designed to assist with medical differential diagnosis using Retrieval-Augmented Generation (RAG) architecture.</p>
+                            </div>
+                            <div>
+                                <h4 class="font-semibold text-lg mb-2">Key Features</h4>
+                                <ul class="list-disc list-inside space-y-1">
+                                    <li>Evidence-based medical suggestions</li>
+                                    <li>Local, open-source model implementation</li>
+                                    <li>Curated medical knowledge base</li>
+                                    <li>RAG architecture for accurate responses</li>
+                                </ul>
+                            </div>
+                            <div>
+                                <h4 class="font-semibold text-lg mb-2">Technologies Used</h4>
+                                <div class="flex flex-wrap gap-2">
+                                    <span class="px-3 py-1 bg-blue-100 dark:bg-blue-900 text-blue-800 dark:text-blue-200 rounded-full text-sm">LangChain</span>
+                                    <span class="px-3 py-1 bg-blue-100 dark:bg-blue-900 text-blue-800 dark:text-blue-200 rounded-full text-sm">Llama 3</span>
+                                    <span class="px-3 py-1 bg-blue-100 dark:bg-blue-900 text-blue-800 dark:text-blue-200 rounded-full text-sm">Hugging Face</span>
+                                    <span class="px-3 py-1 bg-blue-100 dark:bg-blue-900 text-blue-800 dark:text-blue-200 rounded-full text-sm">ChromaDB</span>
+                                </div>
+                            </div>
+                        </div>
+                    `
+                },
+                promotion: {
+                    title: "Dynamic Promotion Personalization",
+                    content: `
+                        <div class="space-y-4">
+                            <div>
+                                <h4 class="font-semibold text-lg mb-2">Project Overview</h4>
+                                <p>An A/B test simulation using contextual multi-armed bandit algorithms to personalize marketing offers and maximize conversions.</p>
+                            </div>
+                            <div>
+                                <h4 class="font-semibold text-lg mb-2">Key Results</h4>
+                                <ul class="list-disc list-inside space-y-1">
+                                    <li>+132% lift in conversions over static control</li>
+                                    <li>Real-time personalization engine</li>
+                                    <li>Statistical significance testing</li>
+                                    <li>Interactive Streamlit dashboard</li>
+                                </ul>
+                            </div>
+                            <div>
+                                <h4 class="font-semibold text-lg mb-2">Technologies Used</h4>
+                                <div class="flex flex-wrap gap-2">
+                                    <span class="px-3 py-1 bg-green-100 dark:bg-green-900 text-green-800 dark:text-green-200 rounded-full text-sm">Reinforcement Learning</span>
+                                    <span class="px-3 py-1 bg-green-100 dark:bg-green-900 text-green-800 dark:text-green-200 rounded-full text-sm">A/B Testing</span>
+                                    <span class="px-3 py-1 bg-green-100 dark:bg-green-900 text-green-800 dark:text-green-200 rounded-full text-sm">Streamlit</span>
+                                    <span class="px-3 py-1 bg-green-100 dark:bg-green-900 text-green-800 dark:text-green-200 rounded-full text-sm">Python</span>
+                                </div>
+                            </div>
+                        </div>
+                    `
+                }
+            };
+
+            projectDetailsBtns.forEach(btn => {
+                btn.addEventListener('click', () => {
+                    const projectId = btn.getAttribute('data-project');
+                    const project = projectData[projectId];
+                    
+                    if (project) {
+                        modalTitle.textContent = project.title;
+                        modalContent.innerHTML = project.content;
+                        modal.classList.remove('hidden');
+                    }
+                });
+            });
+
+            closeModal.addEventListener('click', () => {
+                modal.classList.add('hidden');
+            });
+
+            modal.addEventListener('click', (e) => {
+                if (e.target === modal) {
+                    modal.classList.add('hidden');
+                }
+            });
 
             // --- Interactive Particle Background ---
             const canvas = document.getElementById('particle-background');
