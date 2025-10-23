@@ -364,11 +364,10 @@
                             <div class="flex flex-wrap gap-2 mb-3"><span class="tag">Scikit-learn</span><span class="tag">Ensemble Learning</span><span class="tag">SMOTE</span><span class="tag">SHAP</span></div>
                             <h3 class="text-xl font-bold text-white">Credit Card Fraud Detection</h3>
                             <p class="mt-2 text-slate-400">Developed a high-efficacy fraud detection system using a stacked ensemble model, advanced feature engineering, and SMOTE to overcome severe class imbalance. The final model achieves 82% recall for fraudulent transactions, a significant improvement over baseline models.</p>
-                            <div class="mt-4">
-                                <h4 class="text-sm font-semibold text-sky-400 mb-2">Project Story</h4>
-                                <p class="text-sm text-slate-300">Fraud detection is a classic imbalanced data problem - how do you catch the 0.1% of fraudulent transactions without overwhelming legitimate customers with false alarms? I learned that precision vs. recall trade-offs have real business implications - blocking a legitimate transaction costs customer trust, while missing fraud costs money. This project taught me that model performance metrics must align with business objectives.</p>
+                            <div class="mt-4 flex gap-4">
+                                <a href="https://github.com/nikitakumari2/CreditCardFraud" target="_blank" class="font-semibold text-sky-400 hover:underline">GitHub 🔗</a>
+                                <button class="font-semibold text-sky-400 hover:underline project-story-btn" data-story="fraud">Project Story 📖</button>
                             </div>
-                            <div class="mt-4 flex gap-4"><a href="https://github.com/nikitakumari2/CreditCardFraud" target="_blank" class="font-semibold text-sky-400 hover:underline">GitHub 🔗</a></div>
                         </div>
                     </div>
                     <div class="project-card card" data-category="viz">
@@ -386,11 +385,10 @@
                             <div class="flex flex-wrap gap-2 mb-3"><span class="tag">Tableau</span><span class="tag">Dashboard</span></div>
                             <h3 class="text-xl font-bold text-white">Heart Failure Tableau Visualization</h3>
                             <p class="mt-2 text-slate-400">This dashboard includes demographic details such as sex and age, along with medical conditions and laboratory measurements, providing a comprehensive view of the characteristics and outcomes within this patient population.</p>
-                            <div class="mt-4">
-                                <h4 class="text-sm font-semibold text-sky-400 mb-2">Project Story</h4>
-                                <p class="text-sm text-slate-300">Healthcare data is complex and messy - how do you make it accessible to clinicians who need quick insights? I discovered that the right visualization can reveal patterns that statistical analysis alone might miss. This project taught me that effective data storytelling in healthcare requires understanding both the data and the end user's workflow.</p>
+                            <div class="mt-4 flex gap-4">
+                                <a href="https://github.com/nikitakumari2/Interactive-Tableau-Dashboard---Heart-Failure-Healthcare-" target="_blank" class="font-semibold text-sky-400 hover:underline">GitHub 🔗</a>
+                                <button class="font-semibold text-sky-400 hover:underline project-story-btn" data-story="heart">Project Story 📖</button>
                             </div>
-                             <div class="mt-4 flex gap-4"><a href="https://github.com/nikitakumari2/Interactive-Tableau-Dashboard---Heart-Failure-Healthcare-" target="_blank" class="font-semibold text-sky-400 hover:underline">GitHub 🔗</a></div>
                         </div>
                     </div>
                     <div class="project-card card" data-category="ml">
@@ -399,11 +397,10 @@
                             <div class="flex flex-wrap gap-2 mb-3"><span class="tag">PyTorch</span><span class="tag">Logistic Regression</span><span class="tag">Random Forest</span><span class="tag">XGBoost</span></div>
                             <h3 class="text-xl font-bold text-white">Diabetes Prediction</h3>
                             <p class="mt-2 text-slate-400">The project explores the challenges of working with imbalanced data and compares the performance of classical machine learning models against a deep learning approach.</p>
-                            <div class="mt-4">
-                                <h4 class="text-sm font-semibold text-sky-400 mb-2">Project Story</h4>
-                                <p class="text-sm text-slate-300">Coming from a biological sciences background, I was fascinated by how machine learning could help with early disease detection. The real challenge wasn't just building an accurate model, but dealing with imbalanced medical data where false negatives could have serious health implications. I learned that in healthcare, the cost of missing a diagnosis far outweighs the cost of a false alarm.</p>
+                            <div class="mt-4 flex gap-4">
+                                <a href="https://github.com/nikitakumari2/Predictive-Analysis--Diabetes" class="font-semibold text-sky-400 hover:underline">GitHub 🔗</a>
+                                <button class="font-semibold text-sky-400 hover:underline project-story-btn" data-story="diabetes">Project Story 📖</button>
                             </div>
-                            <div class="mt-4 flex gap-4"><a href="https://github.com/nikitakumari2/Predictive-Analysis--Diabetes" class="font-semibold text-sky-400 hover:underline">GitHub 🔗</a></div>
                         </div>
                     </div>
                 </div>
@@ -572,6 +569,25 @@
         </div>
     </div>
 
+    <!-- Project Story Modal -->
+    <div id="story-modal" class="fixed inset-0 bg-black bg-opacity-50 hidden z-50 flex items-center justify-center p-4">
+        <div class="bg-slate-800 rounded-lg max-w-2xl w-full max-h-[90vh] overflow-y-auto">
+            <div class="p-6">
+                <div class="flex justify-between items-center mb-4">
+                    <h3 id="story-modal-title" class="text-2xl font-bold text-white">Project Story</h3>
+                    <button id="close-story-modal" class="text-gray-400 hover:text-gray-200">
+                        <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path>
+                        </svg>
+                    </button>
+                </div>
+                <div id="story-modal-content" class="text-gray-300">
+                    <!-- Content will be populated by JavaScript -->
+                </div>
+            </div>
+        </div>
+    </div>
+
     <script>
         document.addEventListener('DOMContentLoaded', () => {
             // --- GSAP & ScrollTrigger Setup ---
@@ -599,6 +615,13 @@
             const modalContent = document.getElementById('modal-content');
             const closeModal = document.getElementById('close-modal');
             const projectDetailsBtns = document.querySelectorAll('.project-details-btn');
+
+            // --- Project Story Modal ---
+            const storyModal = document.getElementById('story-modal');
+            const storyModalTitle = document.getElementById('story-modal-title');
+            const storyModalContent = document.getElementById('story-modal-content');
+            const closeStoryModal = document.getElementById('close-story-modal');
+            const projectStoryBtns = document.querySelectorAll('.project-story-btn');
 
             const projectData = {
                 ddx: {
@@ -661,6 +684,66 @@
                 }
             };
 
+            const storyData = {
+                diabetes: {
+                    title: "Diabetes Prediction - Project Story",
+                    content: `
+                        <div class="space-y-4">
+                            <div>
+                                <h4 class="font-semibold text-lg mb-2 text-sky-400">The Challenge</h4>
+                                <p class="mb-4">Coming from a biological sciences background, I was fascinated by how machine learning could help with early disease detection. The real challenge wasn't just building an accurate model, but dealing with imbalanced medical data where false negatives could have serious health implications.</p>
+                            </div>
+                            <div>
+                                <h4 class="font-semibold text-lg mb-2 text-sky-400">Key Learning</h4>
+                                <p class="mb-4">I learned that in healthcare, the cost of missing a diagnosis far outweighs the cost of a false alarm. This fundamentally changed how I approached model evaluation - recall became more important than precision, and I had to think about the real-world impact of each prediction.</p>
+                            </div>
+                            <div>
+                                <h4 class="font-semibold text-lg mb-2 text-sky-400">Technical Approach</h4>
+                                <p>I experimented with both classical ML models (Logistic Regression, Random Forest, XGBoost) and deep learning approaches using PyTorch, comparing their performance on imbalanced data and learning how to properly handle class imbalance in medical datasets.</p>
+                            </div>
+                        </div>
+                    `
+                },
+                heart: {
+                    title: "Heart Failure Visualization - Project Story",
+                    content: `
+                        <div class="space-y-4">
+                            <div>
+                                <h4 class="font-semibold text-lg mb-2 text-sky-400">The Challenge</h4>
+                                <p class="mb-4">Healthcare data is complex and messy - how do you make it accessible to clinicians who need quick insights? I discovered that the right visualization can reveal patterns that statistical analysis alone might miss.</p>
+                            </div>
+                            <div>
+                                <h4 class="font-semibold text-lg mb-2 text-sky-400">Key Learning</h4>
+                                <p class="mb-4">This project taught me that effective data storytelling in healthcare requires understanding both the data and the end user's workflow. Clinicians don't have time to interpret complex charts - they need clear, actionable insights at a glance.</p>
+                            </div>
+                            <div>
+                                <h4 class="font-semibold text-lg mb-2 text-sky-400">Design Process</h4>
+                                <p>I focused on creating intuitive dashboards that highlight key demographic patterns, medical conditions, and laboratory measurements, making it easy for healthcare professionals to identify trends and outliers in patient populations.</p>
+                            </div>
+                        </div>
+                    `
+                },
+                fraud: {
+                    title: "Credit Card Fraud Detection - Project Story",
+                    content: `
+                        <div class="space-y-4">
+                            <div>
+                                <h4 class="font-semibold text-lg mb-2 text-sky-400">The Challenge</h4>
+                                <p class="mb-4">Fraud detection is a classic imbalanced data problem - how do you catch the 0.1% of fraudulent transactions without overwhelming legitimate customers with false alarms?</p>
+                            </div>
+                            <div>
+                                <h4 class="font-semibold text-lg mb-2 text-sky-400">Key Learning</h4>
+                                <p class="mb-4">I learned that precision vs. recall trade-offs have real business implications - blocking a legitimate transaction costs customer trust, while missing fraud costs money. This project taught me that model performance metrics must align with business objectives.</p>
+                            </div>
+                            <div>
+                                <h4 class="font-semibold text-lg mb-2 text-sky-400">Technical Solution</h4>
+                                <p>I used a stacked ensemble model with advanced feature engineering and SMOTE to overcome severe class imbalance, achieving 82% recall for fraudulent transactions - a significant improvement over baseline models while maintaining acceptable precision.</p>
+                            </div>
+                        </div>
+                    `
+                }
+            };
+
             projectDetailsBtns.forEach(btn => {
                 btn.addEventListener('click', () => {
                     const projectId = btn.getAttribute('data-project');
@@ -681,6 +764,30 @@
             modal.addEventListener('click', (e) => {
                 if (e.target === modal) {
                     modal.classList.add('hidden');
+                }
+            });
+
+            // --- Story Modal Event Handlers ---
+            projectStoryBtns.forEach(btn => {
+                btn.addEventListener('click', () => {
+                    const storyId = btn.getAttribute('data-story');
+                    const story = storyData[storyId];
+                    
+                    if (story) {
+                        storyModalTitle.textContent = story.title;
+                        storyModalContent.innerHTML = story.content;
+                        storyModal.classList.remove('hidden');
+                    }
+                });
+            });
+
+            closeStoryModal.addEventListener('click', () => {
+                storyModal.classList.add('hidden');
+            });
+
+            storyModal.addEventListener('click', (e) => {
+                if (e.target === storyModal) {
+                    storyModal.classList.add('hidden');
                 }
             });
 
