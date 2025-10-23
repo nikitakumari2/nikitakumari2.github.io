@@ -332,6 +332,7 @@
                                 <a href="https://github.com/nikitakumari2/ddx_agent" target="_blank" class="font-semibold text-sky-400 hover:underline">GitHub 🔗</a>
                                 <a href="https://your-live-demo-url.com" target="_blank" class="font-semibold text-sky-400 hover:underline">Live Demo 🚀</a>
                                 <button class="font-semibold text-sky-400 hover:underline project-details-btn" data-project="ddx">Details 📋</button>
+                                <button class="font-semibold text-sky-400 hover:underline project-story-btn" data-story="medical-ai">Project Story 📖</button>
                             </div>
                         </div>
                     </div>
@@ -345,6 +346,7 @@
                                 <a href="https://github.com/nikitakumari2/promotion_personalization" target="_blank" class="font-semibold text-sky-400 hover:underline">GitHub 🔗</a>
                                 <a href="https://promotionpersonalization-nikitak.streamlit.app/" target="_blank" class="font-semibold text-sky-400 hover:underline">Live Demo 🚀</a>
                                 <button class="font-semibold text-sky-400 hover:underline project-details-btn" data-project="promotion">Details 📋</button>
+                                <button class="font-semibold text-sky-400 hover:underline project-story-btn" data-story="promotion">Project Story 📖</button>
                             </div>
                         </div>
                     </div>
@@ -356,7 +358,11 @@
                             </div>
                             <h3 class="text-xl font-bold text-white">Biomedical Literature Search & Insight Engine</h3>
                             <p class="mt-2 text-slate-400">A system that ingests biomedical research papers from PubMed, processes the text, and allows users to search for connections between concepts like genes, diseases, and drugs, showcasing NLP and information retrieval skills.</p>
-                            <div class="mt-4 flex gap-4"><a href="https://github.com/nikitakumari2/biomed_engine" target="_blank" class="font-semibold text-sky-400 hover:underline">GitHub 🔗</a><a href="https://your-live-demo-url.com" target="_blank" class="font-semibold text-sky-400 hover:underline">Live Demo 🚀</a></div>
+                            <div class="mt-4 flex gap-4">
+                                <a href="https://github.com/nikitakumari2/biomed_engine" target="_blank" class="font-semibold text-sky-400 hover:underline">GitHub 🔗</a>
+                                <a href="https://your-live-demo-url.com" target="_blank" class="font-semibold text-sky-400 hover:underline">Live Demo 🚀</a>
+                                <button class="font-semibold text-sky-400 hover:underline project-story-btn" data-story="biomed">Project Story 📖</button>
+                            </div>
                         </div>
                     </div>
                     <div class="project-card card" data-category="ml">
@@ -376,7 +382,10 @@
                             <div class="flex flex-wrap gap-2 mb-3"><span class="tag">Tableau</span><span class="tag">Dashboard</span></div>
                             <h3 class="text-xl font-bold text-white">Netflix Tableau Visualization</h3>
                             <p class="mt-2 text-slate-400">This interactive visualization provides a comprehensive overview of Netflix's content and viewership trends. Dive into the data to explore how Netflix's vast library captivates audiences worldwide and understand the dynamics driving its success in the global streaming landscape.</p>
-                             <div class="mt-4 flex gap-4"><a href="https://github.com/nikitakumari2/Netflix_Tableau_Visualization" target="_blank" class="font-semibold text-sky-400 hover:underline">GitHub 🔗</a></div>
+                             <div class="mt-4 flex gap-4">
+                                 <a href="https://github.com/nikitakumari2/Netflix_Tableau_Visualization" target="_blank" class="font-semibold text-sky-400 hover:underline">GitHub 🔗</a>
+                                 <button class="font-semibold text-sky-400 hover:underline project-story-btn" data-story="netflix">Project Story 📖</button>
+                             </div>
                         </div>
                     </div>
                     <div class="project-card card" data-category="viz">
@@ -738,6 +747,82 @@
                             <div>
                                 <h4 class="font-semibold text-lg mb-2 text-sky-400">Technical Solution</h4>
                                 <p>I used a stacked ensemble model with advanced feature engineering and SMOTE to overcome severe class imbalance, achieving 82% recall for fraudulent transactions - a significant improvement over baseline models while maintaining acceptable precision.</p>
+                            </div>
+                        </div>
+                    `
+                },
+                "medical-ai": {
+                    title: "Medical AI Diagnostic Agent - Project Story",
+                    content: `
+                        <div class="space-y-4">
+                            <div>
+                                <h4 class="font-semibold text-lg mb-2 text-sky-400">The Challenge</h4>
+                                <p class="mb-4">How do you build an AI system that can assist with medical diagnosis while ensuring it's both accurate and trustworthy? The challenge was creating a system that could provide evidence-based suggestions without making definitive medical claims.</p>
+                            </div>
+                            <div>
+                                <h4 class="font-semibold text-lg mb-2 text-sky-400">Key Learning</h4>
+                                <p class="mb-4">I learned that in medical AI, transparency and explainability are crucial. Using RAG architecture with local models ensures privacy while providing traceable, evidence-based responses. The system must be a diagnostic assistant, not a replacement for medical professionals.</p>
+                            </div>
+                            <div>
+                                <h4 class="font-semibold text-lg mb-2 text-sky-400">Technical Approach</h4>
+                                <p>I implemented a RAG system using LangChain, Llama 3, and ChromaDB to create a local, privacy-preserving medical knowledge base. The system retrieves relevant medical literature and generates contextual responses, always emphasizing the need for professional medical consultation.</p>
+                            </div>
+                        </div>
+                    `
+                },
+                promotion: {
+                    title: "Dynamic Promotion Personalization - Project Story",
+                    content: `
+                        <div class="space-y-4">
+                            <div>
+                                <h4 class="font-semibold text-lg mb-2 text-sky-400">The Challenge</h4>
+                                <p class="mb-4">How do you personalize marketing offers in real-time while learning from user behavior? The challenge was building a system that could adapt to individual preferences while maintaining statistical rigor in A/B testing.</p>
+                            </div>
+                            <div>
+                                <h4 class="font-semibold text-lg mb-2 text-sky-400">Key Learning</h4>
+                                <p class="mb-4">I discovered that contextual multi-armed bandits can achieve remarkable results (+132% lift) by balancing exploration and exploitation. The key was understanding that personalization isn't just about showing the right offer, but learning when to show it and to whom.</p>
+                            </div>
+                            <div>
+                                <h4 class="font-semibold text-lg mb-2 text-sky-400">Business Impact</h4>
+                                <p>This project taught me that reinforcement learning in marketing isn't just about algorithms - it's about understanding customer psychology, seasonal patterns, and the delicate balance between personalization and privacy. The Streamlit dashboard made the results accessible to non-technical stakeholders.</p>
+                            </div>
+                        </div>
+                    `
+                },
+                biomed: {
+                    title: "Biomedical Literature Search - Project Story",
+                    content: `
+                        <div class="space-y-4">
+                            <div>
+                                <h4 class="font-semibold text-lg mb-2 text-sky-400">The Challenge</h4>
+                                <p class="mb-4">Biomedical research generates millions of papers annually. How do researchers find connections between genes, diseases, and drugs across this vast literature? The challenge was building a system that could understand complex biomedical relationships.</p>
+                            </div>
+                            <div>
+                                <h4 class="font-semibold text-lg mb-2 text-sky-400">Key Learning</h4>
+                                <p class="mb-4">I learned that biomedical NLP requires domain-specific knowledge and careful entity recognition. Using spaCy for NER and building knowledge graphs revealed hidden connections that simple keyword searches would miss. The PubMed API integration was crucial for accessing authoritative medical literature.</p>
+                            </div>
+                            <div>
+                                <h4 class="font-semibold text-lg mb-2 text-sky-400">Technical Innovation</h4>
+                                <p>I built a system that processes PubMed abstracts, extracts biomedical entities (genes, diseases, drugs), and creates a searchable knowledge graph. The Elasticsearch integration enables complex queries across millions of research papers, helping researchers discover novel connections in biomedical literature.</p>
+                            </div>
+                        </div>
+                    `
+                },
+                netflix: {
+                    title: "Netflix Visualization - Project Story",
+                    content: `
+                        <div class="space-y-4">
+                            <div>
+                                <h4 class="font-semibold text-lg mb-2 text-sky-400">The Challenge</h4>
+                                <p class="mb-4">How do you make sense of Netflix's massive content library and viewer preferences? The challenge was creating visualizations that could reveal patterns in content consumption and help understand what drives viewer engagement.</p>
+                            </div>
+                            <div>
+                                <h4 class="font-semibold text-lg mb-2 text-sky-400">Key Learning</h4>
+                                <p class="mb-4">I discovered that effective data visualization in entertainment requires understanding both the data and the audience. Netflix's success isn't just about content quantity - it's about understanding viewer behavior, seasonal trends, and the complex relationship between content type and audience demographics.</p>
+                            </div>
+                            <div>
+                                <h4 class="font-semibold text-lg mb-2 text-sky-400">Design Process</h4>
+                                <p>I focused on creating interactive dashboards that could reveal insights about content trends, viewer preferences, and global streaming patterns. The visualization helps understand how Netflix's data-driven approach to content creation and recommendation drives its success in the competitive streaming landscape.</p>
                             </div>
                         </div>
                     `
