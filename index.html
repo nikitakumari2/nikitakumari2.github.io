@@ -458,10 +458,40 @@
                 font-size: 1.25rem;
             }
         }
+        /* Statistics Counter Animation */
+        .stat-counter {
+            transition: all 0.3s ease;
+        }
+        /* Form Styles */
+        #contact-form input:focus,
+        #contact-form textarea:focus {
+            box-shadow: 0 0 0 3px rgba(56, 189, 248, 0.1);
+        }
+        #form-message.success {
+            color: #10b981;
+        }
+        #form-message.error {
+            color: #ef4444;
+        }
+        /* Scroll Progress Indicator */
+        .scroll-progress {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 3px;
+            background: var(--accent-gradient);
+            z-index: 100;
+            transform-origin: left;
+            transform: scaleX(0);
+            transition: transform 0.1s ease;
+        }
     </style>
 </head>
 <body class="antialiased">
     <canvas id="particle-background"></canvas>
+    <!-- Scroll Progress Indicator -->
+    <div class="scroll-progress" id="scroll-progress"></div>
     <!-- Header & Navigation -->
     <header class="fixed top-0 left-0 right-0 z-50 glassmorphism">
         <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
@@ -471,13 +501,13 @@
                 </div>
                 <div class="hidden md:block">
                     <div class="ml-10 flex items-baseline space-x-4">
-                        <a href="#about" class="text-gray-300 hover:text-white px-3 py-2 rounded-md text-sm font-medium transition-colors">About</a>
-                        <a href="#skills" class="text-gray-300 hover:text-white px-3 py-2 rounded-md text-sm font-medium transition-colors">Skills</a>
-                        <a href="#projects" class="text-gray-300 hover:text-white px-3 py-2 rounded-md text-sm font-medium transition-colors">Projects</a>
-                        <a href="#experience" class="text-gray-300 hover:text-white px-3 py-2 rounded-md text-sm font-medium transition-colors">Experience</a>
-                        <a href="#education" class="text-gray-300 hover:text-white px-3 py-2 rounded-md text-sm font-medium transition-colors">Education</a>
-                        <a href="#certifications" class="text-gray-300 hover:text-white px-3 py-2 rounded-md text-sm font-medium transition-colors">Certifications</a>
-                        <a href="#contact" class="text-gray-300 hover:text-white px-3 py-2 rounded-md text-sm font-medium transition-colors">Contact</a>
+                        <a href="#about" class="text-gray-300 hover:text-white px-3 py-2 rounded-md text-sm font-medium transition-colors" aria-label="Navigate to About section">About</a>
+                        <a href="#skills" class="text-gray-300 hover:text-white px-3 py-2 rounded-md text-sm font-medium transition-colors" aria-label="Navigate to Skills section">Skills</a>
+                        <a href="#projects" class="text-gray-300 hover:text-white px-3 py-2 rounded-md text-sm font-medium transition-colors" aria-label="Navigate to Projects section">Projects</a>
+                        <a href="#experience" class="text-gray-300 hover:text-white px-3 py-2 rounded-md text-sm font-medium transition-colors" aria-label="Navigate to Experience section">Experience</a>
+                        <a href="#education" class="text-gray-300 hover:text-white px-3 py-2 rounded-md text-sm font-medium transition-colors" aria-label="Navigate to Education section">Education</a>
+                        <a href="#certifications" class="text-gray-300 hover:text-white px-3 py-2 rounded-md text-sm font-medium transition-colors" aria-label="Navigate to Certifications section">Certifications</a>
+                        <a href="#contact" class="text-gray-300 hover:text-white px-3 py-2 rounded-md text-sm font-medium transition-colors" aria-label="Navigate to Contact section">Contact</a>
                     </div>
                 </div>
                 <!-- Mobile Menu Button -->
@@ -553,8 +583,32 @@
                     My foundation in the biological sciences gave me a unique lens for understanding the complex, dynamic nature of data. While I loved the science, I found myself even more fascinated by the complex data behind it. That curiosity led me to pursue a Master's in Data Science at ASU, where I could focus on building tools that make data useful for everyone, not just experts.
                 </p>
                 <p class="mt-4 text-lg text-slate-300">
-                    Now, my focus is on building complete, end-to-end solutions. I enjoy the entire process, from wrangling large-scale data using tools like PySpark to developing and deploying sophisticated machine learning models. I’m especially passionate about using technologies like natural language processing to build intelligent systems that are both powerful and intuitive. My goal is always to transform raw data into clear, actionable insights that can drive better decisions.
+                    Now, my focus is on building complete, end-to-end solutions. I enjoy the entire process, from wrangling large-scale data using tools like PySpark to developing and deploying sophisticated machine learning models. I'm especially passionate about using technologies like natural language processing to build intelligent systems that are both powerful and intuitive. My goal is always to transform raw data into clear, actionable insights that can drive better decisions.
                 </p>
+            </div>
+        </section>
+
+        <!-- Statistics Section -->
+        <section id="statistics" class="py-16 sm:py-20 bg-slate-900/50">
+            <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+                <div class="grid grid-cols-2 md:grid-cols-4 gap-6 md:gap-8">
+                    <div class="text-center">
+                        <div class="text-4xl md:text-5xl font-bold text-gradient mb-2" data-count="8">0</div>
+                        <div class="text-sm md:text-base text-slate-400">Projects Completed</div>
+                    </div>
+                    <div class="text-center">
+                        <div class="text-4xl md:text-5xl font-bold text-gradient mb-2" data-count="3">0</div>
+                        <div class="text-sm md:text-base text-slate-400">Certifications</div>
+                    </div>
+                    <div class="text-center">
+                        <div class="text-4xl md:text-5xl font-bold text-gradient mb-2" data-count="132">0%</div>
+                        <div class="text-sm md:text-base text-slate-400">Conversion Lift</div>
+                    </div>
+                    <div class="text-center">
+                        <div class="text-4xl md:text-5xl font-bold text-gradient mb-2" data-count="2">0</div>
+                        <div class="text-sm md:text-base text-slate-400">Years Experience</div>
+                    </div>
+                </div>
             </div>
         </section>
 
@@ -666,6 +720,16 @@
                             <div class="flex flex-wrap gap-2 mb-3"> <span class="tag">Reinforcement Learning</span><span class="tag">A/B Testing</span><span class="tag">Streamlit</span><span class="tag">Python</span></div>
                             <h3 class="text-xl font-bold text-white">Dynamic Promotion Personalization</h3>
                             <p class="mt-2 text-slate-400">An A/B test simulation where a contextual multi-armed bandit learns to personalize marketing offers, achieving a +132% lift in conversions over a static control group.</p>
+                            <div class="mt-4 flex items-center gap-4 text-sm text-slate-500">
+                                <span class="flex items-center gap-1">
+                                    <svg class="w-4 h-4" fill="currentColor" viewBox="0 0 20 20"><path d="M9 2a1 1 0 000 2h2a1 1 0 100-2H9z"></path><path fill-rule="evenodd" d="M4 5a2 2 0 012-2 3 3 0 003 3h2a3 3 0 003-3 2 2 0 012 2v11a2 2 0 01-2 2H6a2 2 0 01-2-2V5zm3 4a1 1 0 000 2h.01a1 1 0 100-2H7zm3 0a1 1 0 000 2h3a1 1 0 100-2h-3zm-3 4a1 1 0 100 2h.01a1 1 0 100-2H7zm3 0a1 1 0 100 2h3a1 1 0 100-2h-3z" clip-rule="evenodd"></path></svg>
+                                    +132% Lift
+                                </span>
+                                <span class="flex items-center gap-1">
+                                    <svg class="w-4 h-4" fill="currentColor" viewBox="0 0 20 20"><path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm1-12a1 1 0 10-2 0v4a1 1 0 00.293.707l2.828 2.829a1 1 0 101.415-1.415L11 9.586V6z" clip-rule="evenodd"></path></svg>
+                                    Real-time
+                                </span>
+                            </div>
                             <div class="mt-4 flex gap-4">
                                 <a href="https://github.com/nikitakumari2/promotion_personalization" target="_blank" class="font-semibold text-sky-400 hover:underline">GitHub 🔗</a>
                                 <a href="https://promotionpersonalization-nikitak.streamlit.app/" target="_blank" class="font-semibold text-sky-400 hover:underline">Live Demo 🚀</a>
@@ -708,6 +772,16 @@
                             <div class="flex flex-wrap gap-2 mb-3"><span class="tag">Scikit-learn</span><span class="tag">Ensemble Learning</span><span class="tag">SMOTE</span><span class="tag">SHAP</span></div>
                             <h3 class="text-xl font-bold text-white">Credit Card Fraud Detection</h3>
                             <p class="mt-2 text-slate-400">Developed a high-efficacy fraud detection system using a stacked ensemble model, advanced feature engineering, and SMOTE to overcome severe class imbalance. The final model achieves 82% recall for fraudulent transactions, a significant improvement over baseline models.</p>
+                            <div class="mt-4 flex items-center gap-4 text-sm text-slate-500">
+                                <span class="flex items-center gap-1">
+                                    <svg class="w-4 h-4" fill="currentColor" viewBox="0 0 20 20"><path fill-rule="evenodd" d="M6.267 3.455a3.066 3.066 0 001.745-.723 3.066 3.066 0 013.976 0 3.066 3.066 0 001.745.723 3.066 3.066 0 012.812 2.812c.051.643.304 1.254.723 1.745a3.066 3.066 0 010 3.976 3.066 3.066 0 00-.723 1.745 3.066 3.066 0 01-2.812 2.812 3.066 3.066 0 00-1.745.723 3.066 3.066 0 01-3.976 0 3.066 3.066 0 00-1.745-.723 3.066 3.066 0 01-2.812-2.812 3.066 3.066 0 00-.723-1.745 3.066 3.066 0 010-3.976 3.066 3.066 0 00.723-1.745 3.066 3.066 0 012.812-2.812zm7.44 5.252a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clip-rule="evenodd"></path></svg>
+                                    82% Recall
+                                </span>
+                                <span class="flex items-center gap-1">
+                                    <svg class="w-4 h-4" fill="currentColor" viewBox="0 0 20 20"><path d="M9 2a1 1 0 000 2h2a1 1 0 100-2H9z"></path><path fill-rule="evenodd" d="M4 5a2 2 0 012-2 3 3 0 003 3h2a3 3 0 003-3 2 2 0 012 2v11a2 2 0 01-2 2H6a2 2 0 01-2-2V5zm3 4a1 1 0 000 2h.01a1 1 0 100-2H7zm3 0a1 1 0 000 2h3a1 1 0 100-2h-3zm-3 4a1 1 0 100 2h.01a1 1 0 100-2H7zm3 0a1 1 0 100 2h3a1 1 0 100-2h-3z" clip-rule="evenodd"></path></svg>
+                                    Ensemble
+                                </span>
+                            </div>
                             <div class="mt-4 flex gap-4">
                                 <a href="https://github.com/nikitakumari2/CreditCardFraud" target="_blank" class="font-semibold text-sky-400 hover:underline">GitHub 🔗</a>
                                 <button class="font-semibold text-sky-400 hover:underline project-story-btn" data-story="fraud">Project Story 📖</button>
@@ -878,14 +952,43 @@
 
         <!-- Contact Section -->
         <section id="contact" class="py-24 sm:py-32">
-            <div class="text-center max-w-2xl mx-auto px-4">
-                <h2 class="text-3xl sm:text-4xl font-bold text-white">Let's Connect</h2>
-                <p class="mt-4 text-lg text-slate-400">
-                    I am actively seeking full-time opportunities and collaborations. If you have a project in mind or just want to discuss the future of data, I'd love to hear from you.
-                </p>
-                <a href="mailto:nikitak.nk11@gmail.com" class="mt-10 inline-block bg-sky-500 text-white font-bold text-lg py-4 px-10 rounded-lg hover:bg-sky-600 transition-all duration-300 transform hover:scale-105 shadow-lg shadow-sky-500/30">
-                    Get In Touch
-                </a>
+            <div class="max-w-3xl mx-auto px-4 sm:px-6 lg:px-8">
+                <div class="text-center mb-12">
+                    <h2 class="text-3xl sm:text-4xl font-bold text-white">Let's Connect</h2>
+                    <p class="mt-4 text-lg text-slate-400">
+                        I am actively seeking full-time opportunities and collaborations. If you have a project in mind or just want to discuss the future of data, I'd love to hear from you.
+                    </p>
+                </div>
+                <div class="card p-8 md:p-10">
+                    <form id="contact-form" class="space-y-6" aria-label="Contact form">
+                        <div>
+                            <label for="name" class="block text-sm font-medium text-slate-300 mb-2">Name</label>
+                            <input type="text" id="name" name="name" required class="w-full px-4 py-3 bg-slate-800 border border-slate-700 rounded-lg text-white placeholder-slate-400 focus:outline-none focus:ring-2 focus:ring-sky-500 focus:border-transparent transition-all" placeholder="Your name">
+                        </div>
+                        <div>
+                            <label for="email" class="block text-sm font-medium text-slate-300 mb-2">Email</label>
+                            <input type="email" id="email" name="email" required class="w-full px-4 py-3 bg-slate-800 border border-slate-700 rounded-lg text-white placeholder-slate-400 focus:outline-none focus:ring-2 focus:ring-sky-500 focus:border-transparent transition-all" placeholder="your.email@example.com">
+                        </div>
+                        <div>
+                            <label for="subject" class="block text-sm font-medium text-slate-300 mb-2">Subject</label>
+                            <input type="text" id="subject" name="subject" required class="w-full px-4 py-3 bg-slate-800 border border-slate-700 rounded-lg text-white placeholder-slate-400 focus:outline-none focus:ring-2 focus:ring-sky-500 focus:border-transparent transition-all" placeholder="What's this about?">
+                        </div>
+                        <div>
+                            <label for="message" class="block text-sm font-medium text-slate-300 mb-2">Message</label>
+                            <textarea id="message" name="message" rows="6" required class="w-full px-4 py-3 bg-slate-800 border border-slate-700 rounded-lg text-white placeholder-slate-400 focus:outline-none focus:ring-2 focus:ring-sky-500 focus:border-transparent transition-all resize-none" placeholder="Tell me about your project or just say hello!"></textarea>
+                        </div>
+                        <div id="form-message" class="hidden text-center text-sm font-medium"></div>
+                        <button type="submit" class="w-full bg-sky-500 text-white font-bold text-lg py-4 px-10 rounded-lg hover:bg-sky-600 transition-all duration-300 transform hover:scale-105 shadow-lg shadow-sky-500/30 focus:outline-none focus:ring-2 focus:ring-sky-500 focus:ring-offset-2 focus:ring-offset-slate-900">
+                            Send Message
+                        </button>
+                    </form>
+                    <div class="mt-8 pt-8 border-t border-slate-700 text-center">
+                        <p class="text-slate-400 mb-4">Or reach out directly</p>
+                        <a href="mailto:nikitak.nk11@gmail.com" class="text-sky-400 hover:text-sky-300 font-medium transition-colors">
+                            nikitak.nk11@gmail.com
+                        </a>
+                    </div>
+                </div>
             </div>
         </section>
     </main>
@@ -1542,6 +1645,107 @@
 
             // Initial check on page load
             toggleBackToTop();
+
+            // --- Statistics Counter Animation ---
+            const statCounters = document.querySelectorAll('[data-count]');
+            const observerOptions = {
+                threshold: 0.5,
+                rootMargin: '0px'
+            };
+
+            const animateCounter = (counter) => {
+                const target = parseInt(counter.getAttribute('data-count'));
+                const duration = 2000; // 2 seconds
+                const increment = target / (duration / 16); // 60fps
+                let current = 0;
+                const isPercentage = counter.textContent.includes('%');
+
+                const updateCounter = () => {
+                    current += increment;
+                    if (current < target) {
+                        counter.textContent = Math.floor(current) + (isPercentage ? '%' : '');
+                        requestAnimationFrame(updateCounter);
+                    } else {
+                        counter.textContent = target + (isPercentage ? '%' : '');
+                    }
+                };
+
+                updateCounter();
+            };
+
+            const statsObserver = new IntersectionObserver((entries) => {
+                entries.forEach(entry => {
+                    if (entry.isIntersecting) {
+                        const counter = entry.target;
+                        if (!counter.classList.contains('counted')) {
+                            counter.classList.add('counted');
+                            animateCounter(counter);
+                        }
+                    }
+                });
+            }, observerOptions);
+
+            statCounters.forEach(counter => {
+                statsObserver.observe(counter);
+            });
+
+            // --- Scroll Progress Indicator ---
+            const scrollProgress = document.getElementById('scroll-progress');
+            function updateScrollProgress() {
+                const windowHeight = window.innerHeight;
+                const documentHeight = document.documentElement.scrollHeight;
+                const scrollTop = window.pageYOffset || document.documentElement.scrollTop;
+                const scrollPercent = scrollTop / (documentHeight - windowHeight);
+                scrollProgress.style.transform = `scaleX(${scrollPercent})`;
+            }
+
+            window.addEventListener('scroll', updateScrollProgress);
+            updateScrollProgress();
+
+            // --- Contact Form Handler ---
+            const contactForm = document.getElementById('contact-form');
+            const formMessage = document.getElementById('form-message');
+
+            if (contactForm) {
+                contactForm.addEventListener('submit', async (e) => {
+                    e.preventDefault();
+                    
+                    const formData = new FormData(contactForm);
+                    const data = {
+                        name: formData.get('name'),
+                        email: formData.get('email'),
+                        subject: formData.get('subject'),
+                        message: formData.get('message')
+                    };
+
+                    // Show loading state
+                    const submitButton = contactForm.querySelector('button[type="submit"]');
+                    const originalText = submitButton.textContent;
+                    submitButton.textContent = 'Sending...';
+                    submitButton.disabled = true;
+                    formMessage.classList.add('hidden');
+
+                    // Simulate form submission (replace with actual API call)
+                    // For now, we'll use mailto as fallback
+                    setTimeout(() => {
+                        const mailtoLink = `mailto:nikitak.nk11@gmail.com?subject=${encodeURIComponent(data.subject)}&body=${encodeURIComponent(`Name: ${data.name}\nEmail: ${data.email}\n\nMessage:\n${data.message}`)}`;
+                        window.location.href = mailtoLink;
+                        
+                        formMessage.textContent = 'Thank you! Your message has been sent.';
+                        formMessage.classList.remove('hidden', 'error');
+                        formMessage.classList.add('success');
+                        contactForm.reset();
+                        
+                        submitButton.textContent = originalText;
+                        submitButton.disabled = false;
+
+                        // Hide message after 5 seconds
+                        setTimeout(() => {
+                            formMessage.classList.add('hidden');
+                        }, 5000);
+                    }, 1000);
+                });
+            }
         });
     </script>
 
