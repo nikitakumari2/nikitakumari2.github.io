@@ -165,6 +165,94 @@
             0%, 50% { opacity: 1; }
             51%, 100% { opacity: 0; }
         }
+        /* Mobile Menu Styles */
+        .mobile-menu {
+            position: fixed;
+            top: 0;
+            right: -100%;
+            width: 80%;
+            max-width: 320px;
+            height: 100vh;
+            background: rgba(15, 23, 42, 0.98);
+            backdrop-filter: blur(20px);
+            -webkit-backdrop-filter: blur(20px);
+            border-left: 1px solid rgba(30, 41, 59, 0.5);
+            z-index: 100;
+            transition: right 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+            overflow-y: auto;
+        }
+        .mobile-menu.open {
+            right: 0;
+        }
+        .mobile-menu-overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100vh;
+            background: rgba(0, 0, 0, 0.5);
+            z-index: 99;
+            opacity: 0;
+            visibility: hidden;
+            transition: opacity 0.3s ease, visibility 0.3s ease;
+        }
+        .mobile-menu-overlay.active {
+            opacity: 1;
+            visibility: visible;
+        }
+        .hamburger {
+            display: flex;
+            flex-direction: column;
+            justify-content: space-around;
+            width: 24px;
+            height: 24px;
+            background: transparent;
+            border: none;
+            cursor: pointer;
+            padding: 0;
+            z-index: 101;
+        }
+        .hamburger span {
+            width: 24px;
+            height: 2px;
+            background: var(--primary-text);
+            border-radius: 2px;
+            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+            transform-origin: center;
+        }
+        .hamburger.active span:nth-child(1) {
+            transform: rotate(45deg) translate(6px, 6px);
+        }
+        .hamburger.active span:nth-child(2) {
+            opacity: 0;
+            transform: translateX(-20px);
+        }
+        .hamburger.active span:nth-child(3) {
+            transform: rotate(-45deg) translate(6px, -6px);
+        }
+        .mobile-nav-link {
+            display: block;
+            padding: 1rem 1.5rem;
+            color: var(--primary-text);
+            text-decoration: none;
+            font-size: 1rem;
+            font-weight: 500;
+            border-bottom: 1px solid rgba(30, 41, 59, 0.5);
+            transition: all 0.2s ease;
+        }
+        .mobile-nav-link:hover {
+            background: rgba(56, 189, 248, 0.1);
+            color: var(--accent-color);
+            padding-left: 2rem;
+        }
+        .mobile-nav-link:active {
+            background: rgba(56, 189, 248, 0.2);
+        }
+        @media (min-width: 768px) {
+            .hamburger {
+                display: none;
+            }
+        }
     </style>
 </head>
 <body class="antialiased">
@@ -187,9 +275,41 @@
                         <a href="#contact" class="text-gray-300 hover:text-white px-3 py-2 rounded-md text-sm font-medium transition-colors">Contact</a>
                     </div>
                 </div>
+                <!-- Mobile Menu Button -->
+                <button id="mobile-menu-btn" class="hamburger md:hidden" aria-label="Toggle mobile menu" aria-expanded="false">
+                    <span></span>
+                    <span></span>
+                    <span></span>
+                </button>
             </div>
         </div>
     </header>
+
+    <!-- Mobile Menu Overlay -->
+    <div id="mobile-menu-overlay" class="mobile-menu-overlay"></div>
+
+    <!-- Mobile Menu -->
+    <nav id="mobile-menu" class="mobile-menu" aria-label="Mobile navigation">
+        <div class="flex flex-col h-full">
+            <div class="flex items-center justify-between p-6 border-b border-slate-700">
+                <span class="text-xl font-bold text-white">Menu</span>
+                <button id="mobile-menu-close" class="text-gray-400 hover:text-white transition-colors" aria-label="Close menu">
+                    <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path>
+                    </svg>
+                </button>
+            </div>
+            <div class="flex-1 py-4">
+                <a href="#about" class="mobile-nav-link">About</a>
+                <a href="#skills" class="mobile-nav-link">Skills</a>
+                <a href="#projects" class="mobile-nav-link">Projects</a>
+                <a href="#experience" class="mobile-nav-link">Experience</a>
+                <a href="#education" class="mobile-nav-link">Education</a>
+                <a href="#certifications" class="mobile-nav-link">Certifications</a>
+                <a href="#contact" class="mobile-nav-link">Contact</a>
+            </div>
+        </div>
+    </nav>
 
     <main class="relative z-10">
         <!-- Hero Section -->
@@ -630,6 +750,67 @@
             
             // Start typing effect after a short delay
             setTimeout(typeText, 1000);
+
+            // --- Mobile Menu Toggle ---
+            const mobileMenuBtn = document.getElementById('mobile-menu-btn');
+            const mobileMenu = document.getElementById('mobile-menu');
+            const mobileMenuOverlay = document.getElementById('mobile-menu-overlay');
+            const mobileMenuClose = document.getElementById('mobile-menu-close');
+            const mobileNavLinks = document.querySelectorAll('.mobile-nav-link');
+            const body = document.body;
+
+            function openMobileMenu() {
+                mobileMenu.classList.add('open');
+                mobileMenuOverlay.classList.add('active');
+                mobileMenuBtn.classList.add('active');
+                mobileMenuBtn.setAttribute('aria-expanded', 'true');
+                body.style.overflow = 'hidden'; // Prevent body scroll when menu is open
+            }
+
+            function closeMobileMenu() {
+                mobileMenu.classList.remove('open');
+                mobileMenuOverlay.classList.remove('active');
+                mobileMenuBtn.classList.remove('active');
+                mobileMenuBtn.setAttribute('aria-expanded', 'false');
+                body.style.overflow = ''; // Restore body scroll
+            }
+
+            // Toggle menu on hamburger button click
+            mobileMenuBtn.addEventListener('click', () => {
+                if (mobileMenu.classList.contains('open')) {
+                    closeMobileMenu();
+                } else {
+                    openMobileMenu();
+                }
+            });
+
+            // Close menu on close button click
+            mobileMenuClose.addEventListener('click', closeMobileMenu);
+
+            // Close menu when clicking overlay
+            mobileMenuOverlay.addEventListener('click', closeMobileMenu);
+
+            // Close menu when clicking a navigation link
+            mobileNavLinks.forEach(link => {
+                link.addEventListener('click', () => {
+                    // Small delay to allow smooth scroll before closing
+                    setTimeout(closeMobileMenu, 100);
+                });
+            });
+
+            // Close menu on Escape key press
+            document.addEventListener('keydown', (e) => {
+                if (e.key === 'Escape' && mobileMenu.classList.contains('open')) {
+                    closeMobileMenu();
+                }
+            });
+
+            // Close menu on window resize if it's larger than mobile
+            window.addEventListener('resize', () => {
+                if (window.innerWidth >= 768 && mobileMenu.classList.contains('open')) {
+                    closeMobileMenu();
+                }
+            });
 
             // --- Project Details Modal ---
             const modal = document.getElementById('project-modal');
