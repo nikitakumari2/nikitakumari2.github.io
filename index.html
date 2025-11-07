@@ -409,6 +409,55 @@
                 display: none;
             }
         }
+        /* Back to Top Button */
+        .back-to-top {
+            position: fixed;
+            bottom: 2rem;
+            right: 2rem;
+            width: 50px;
+            height: 50px;
+            background: var(--accent-gradient);
+            border: none;
+            border-radius: 50%;
+            color: white;
+            font-size: 1.5rem;
+            cursor: pointer;
+            z-index: 40;
+            opacity: 0;
+            visibility: hidden;
+            transform: translateY(20px);
+            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+            box-shadow: 0 4px 12px rgba(56, 189, 248, 0.3);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+        .back-to-top.visible {
+            opacity: 1;
+            visibility: visible;
+            transform: translateY(0);
+        }
+        .back-to-top:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 6px 20px rgba(56, 189, 248, 0.5);
+            background: linear-gradient(to right, #60a5fa, #a78bfa);
+        }
+        .back-to-top:active {
+            transform: translateY(-2px);
+        }
+        .back-to-top svg {
+            width: 24px;
+            height: 24px;
+        }
+        @media (max-width: 768px) {
+            .back-to-top {
+                bottom: 1.5rem;
+                right: 1.5rem;
+                width: 45px;
+                height: 45px;
+                font-size: 1.25rem;
+            }
+        }
     </style>
 </head>
 <body class="antialiased">
@@ -847,6 +896,13 @@
             <p class="text-sm mt-2">Designed with 💙 and built with Tailwind CSS & Three.js</p>
         </div>
     </footer>
+
+    <!-- Back to Top Button -->
+    <button id="back-to-top" class="back-to-top" aria-label="Back to top" title="Back to top">
+        <svg fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 10l7-7m0 0l7 7m-7-7v18"></path>
+        </svg>
+    </button>
 
     <!-- Project Details Modal -->
     <div id="project-modal" class="fixed inset-0 bg-black bg-opacity-50 hidden z-50 flex items-center justify-center p-4">
@@ -1448,6 +1504,44 @@
                     }
                 );
             });
+
+            // --- Back to Top Button ---
+            const backToTopBtn = document.getElementById('back-to-top');
+            const scrollThreshold = 300; // Show button after scrolling 300px
+
+            // Show/hide button based on scroll position
+            function toggleBackToTop() {
+                if (window.pageYOffset > scrollThreshold) {
+                    backToTopBtn.classList.add('visible');
+                } else {
+                    backToTopBtn.classList.remove('visible');
+                }
+            }
+
+            // Smooth scroll to top
+            function scrollToTop() {
+                window.scrollTo({
+                    top: 0,
+                    behavior: 'smooth'
+                });
+            }
+
+            // Listen for scroll events
+            window.addEventListener('scroll', toggleBackToTop);
+
+            // Click handler
+            backToTopBtn.addEventListener('click', scrollToTop);
+
+            // Keyboard accessibility - Enter key
+            backToTopBtn.addEventListener('keydown', (e) => {
+                if (e.key === 'Enter' || e.key === ' ') {
+                    e.preventDefault();
+                    scrollToTop();
+                }
+            });
+
+            // Initial check on page load
+            toggleBackToTop();
         });
     </script>
 
