@@ -298,6 +298,21 @@
             bottom: 0;
             width: 2px;
             background-color: var(--border-color);
+            transform-origin: top;
+            transform: scaleY(0);
+            transition: transform 1.5s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+        .timeline.animated::before {
+            transform: scaleY(1);
+        }
+        .timeline-item {
+            opacity: 0;
+            transform: translateX(-30px);
+            transition: opacity 0.6s ease-out, transform 0.6s ease-out;
+        }
+        .timeline-item.visible {
+            opacity: 1;
+            transform: translateX(0);
         }
         .timeline-item-dot {
             position: absolute;
@@ -312,6 +327,39 @@
             border-radius: 9999px;
             border: 4px solid var(--card-bg);
             z-index: 1;
+            transform: scale(0);
+            transition: transform 0.5s cubic-bezier(0.34, 1.56, 0.64, 1);
+            box-shadow: 0 0 0 0 rgba(56, 189, 248, 0.4);
+        }
+        .timeline-item-dot.visible {
+            transform: scale(1);
+            animation: pulse-dot 2s ease-in-out infinite;
+        }
+        @keyframes pulse-dot {
+            0%, 100% {
+                box-shadow: 0 0 0 0 rgba(56, 189, 248, 0.4);
+            }
+            50% {
+                box-shadow: 0 0 0 8px rgba(56, 189, 248, 0);
+            }
+        }
+        .timeline-item .card {
+            transform: translateY(20px);
+            opacity: 0;
+            transition: transform 0.6s ease-out 0.2s, opacity 0.6s ease-out 0.2s, box-shadow 0.3s ease, border-color 0.3s ease;
+        }
+        .timeline-item.visible .card {
+            transform: translateY(0);
+            opacity: 1;
+        }
+        .timeline-item:hover .card {
+            transform: translateY(-5px);
+            box-shadow: 0 20px 40px -12px rgba(0, 0, 0, 0.5);
+            border-color: var(--accent-color);
+        }
+        .timeline-item:hover .timeline-item-dot {
+            transform: scale(1.2);
+            background-color: #60a5fa;
         }
         #typing-cursor {
             animation: blink 1s infinite;
@@ -1573,9 +1621,85 @@
                 });
             }
 
+            // --- Animated Timeline ---
+            const timelines = document.querySelectorAll('.timeline');
+            timelines.forEach((timeline) => {
+                const timelineItems = timeline.querySelectorAll('.timeline-item');
+                const timelineDots = timeline.querySelectorAll('.timeline-item-dot');
+                
+                // Animate timeline line
+                gsap.to(timeline, {
+                    scrollTrigger: {
+                        trigger: timeline,
+                        start: 'top 80%',
+                        onEnter: () => {
+                            timeline.classList.add('animated');
+                        }
+                    }
+                });
+
+                // Animate timeline items with stagger
+                timelineItems.forEach((item, index) => {
+                    const dot = item.querySelector('.timeline-item-dot');
+                    const card = item.querySelector('.card');
+                    
+                    gsap.fromTo(item, 
+                        { 
+                            opacity: 0, 
+                            x: -30 
+                        },
+                        {
+                            opacity: 1,
+                            x: 0,
+                            duration: 0.8,
+                            delay: index * 0.2,
+                            ease: 'power3.out',
+                            scrollTrigger: {
+                                trigger: item,
+                                start: 'top 85%',
+                                toggleActions: 'play none none none',
+                                onEnter: () => {
+                                    item.classList.add('visible');
+                                    if (dot) {
+                                        setTimeout(() => {
+                                            dot.classList.add('visible');
+                                        }, 200);
+                                    }
+                                }
+                            }
+                        }
+                    );
+
+                    // Animate card separately for smoother effect
+                    if (card) {
+                        gsap.fromTo(card,
+                            {
+                                opacity: 0,
+                                y: 20
+                            },
+                            {
+                                opacity: 1,
+                                y: 0,
+                                duration: 0.6,
+                                delay: index * 0.2 + 0.3,
+                                ease: 'power2.out',
+                                scrollTrigger: {
+                                    trigger: item,
+                                    start: 'top 85%',
+                                    toggleActions: 'play none none none',
+                                }
+                            }
+                        );
+                    }
+                });
+            });
+
             // --- General Scroll Animations ---
             const sections = document.querySelectorAll('section');
             sections.forEach((section) => {
+                // Skip timeline sections as they have their own animations
+                if (section.querySelector('.timeline')) return;
+                
                 gsap.fromTo(section.children, 
                     { autoAlpha: 0, y: 50 }, 
                     { 
