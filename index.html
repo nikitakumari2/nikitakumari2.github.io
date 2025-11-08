@@ -534,9 +534,110 @@
             transform: scaleX(0);
             transition: transform 0.1s ease;
         }
+        /* Page Loader */
+        .page-loader {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: var(--bg-color);
+            z-index: 9999;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            transition: opacity 0.5s ease, visibility 0.5s ease;
+        }
+        .page-loader.hidden {
+            opacity: 0;
+            visibility: hidden;
+        }
+        .loader-spinner {
+            width: 60px;
+            height: 60px;
+            border: 4px solid rgba(56, 189, 248, 0.2);
+            border-top-color: var(--accent-color);
+            border-radius: 50%;
+            animation: spin 1s linear infinite;
+        }
+        @keyframes spin {
+            to { transform: rotate(360deg); }
+        }
+        .loader-text {
+            margin-top: 20px;
+            color: var(--primary-text);
+            font-size: 1rem;
+            font-weight: 500;
+        }
+        /* Skeleton Loaders */
+        .skeleton {
+            background: linear-gradient(90deg, #1e293b 25%, #334155 50%, #1e293b 75%);
+            background-size: 200% 100%;
+            animation: skeleton-loading 1.5s ease-in-out infinite;
+            border-radius: 0.5rem;
+        }
+        @keyframes skeleton-loading {
+            0% { background-position: 200% 0; }
+            100% { background-position: -200% 0; }
+        }
+        .skeleton-card {
+            height: 300px;
+            width: 100%;
+        }
+        .skeleton-text {
+            height: 1rem;
+            margin-bottom: 0.5rem;
+            border-radius: 0.25rem;
+        }
+        .skeleton-text.short {
+            width: 60%;
+        }
+        .skeleton-text.medium {
+            width: 80%;
+        }
+        .skeleton-text.long {
+            width: 100%;
+        }
+        .skeleton-image {
+            height: 200px;
+            width: 100%;
+            border-radius: 0.5rem;
+            margin-bottom: 1rem;
+        }
+        /* Smooth Page Transitions */
+        body {
+            opacity: 0;
+            transition: opacity 0.5s ease-in-out;
+        }
+        body.loaded {
+            opacity: 1;
+        }
+        /* Image Loading States */
+        img {
+            transition: opacity 0.4s ease-in-out;
+        }
+        img:not(.loaded) {
+            opacity: 0.3;
+        }
+        img.loaded {
+            opacity: 1;
+        }
+        img.loading {
+            background: linear-gradient(90deg, #1e293b 25%, #334155 50%, #1e293b 75%);
+            background-size: 200% 100%;
+            animation: skeleton-loading 1.5s ease-in-out infinite;
+            opacity: 0.5;
+        }
     </style>
 </head>
 <body class="antialiased">
+    <!-- Page Loader -->
+    <div class="page-loader" id="page-loader">
+        <div class="loader-spinner"></div>
+        <div class="loader-text">Loading Portfolio...</div>
+    </div>
+    
     <canvas id="particle-background"></canvas>
     <!-- Scroll Progress Indicator -->
     <div class="scroll-progress" id="scroll-progress"></div>
@@ -1080,6 +1181,58 @@
 
     <script>
         document.addEventListener('DOMContentLoaded', () => {
+            // --- Page Loader ---
+            const pageLoader = document.getElementById('page-loader');
+            const documentBody = document.body;
+            
+            // Hide page loader and show content
+            function hidePageLoader() {
+                if (pageLoader) {
+                    pageLoader.classList.add('hidden');
+                    documentBody.classList.add('loaded');
+                    
+                    // Remove loader from DOM after animation
+                    setTimeout(() => {
+                        if (pageLoader.parentNode) {
+                            pageLoader.parentNode.removeChild(pageLoader);
+                        }
+                    }, 500);
+                }
+            }
+            
+            // Wait for all critical resources to load
+            if (document.readyState === 'complete') {
+                hidePageLoader();
+            } else {
+                window.addEventListener('load', () => {
+                    // Add a small delay for smooth transition
+                    setTimeout(hidePageLoader, 300);
+                });
+            }
+            
+            // --- Image Loading States ---
+            const images = document.querySelectorAll('img');
+            images.forEach((img) => {
+                // Add loading class initially
+                img.classList.add('loading');
+                
+                // Handle image load
+                if (img.complete) {
+                    img.classList.remove('loading');
+                    img.classList.add('loaded');
+                } else {
+                    img.addEventListener('load', function() {
+                        this.classList.remove('loading');
+                        this.classList.add('loaded');
+                    });
+                    
+                    img.addEventListener('error', function() {
+                        this.classList.remove('loading');
+                        // Keep opacity 0 for broken images or add error handling
+                    });
+                }
+            });
+            
             // --- GSAP & ScrollTrigger Setup ---
             gsap.registerPlugin(ScrollTrigger);
 
@@ -1105,14 +1258,14 @@
             const mobileMenuOverlay = document.getElementById('mobile-menu-overlay');
             const mobileMenuClose = document.getElementById('mobile-menu-close');
             const mobileNavLinks = document.querySelectorAll('.mobile-nav-link');
-            const body = document.body;
+            const mobileBody = document.body;
 
             function openMobileMenu() {
                 mobileMenu.classList.add('open');
                 mobileMenuOverlay.classList.add('active');
                 mobileMenuBtn.classList.add('active');
                 mobileMenuBtn.setAttribute('aria-expanded', 'true');
-                body.style.overflow = 'hidden'; // Prevent body scroll when menu is open
+                mobileBody.style.overflow = 'hidden'; // Prevent body scroll when menu is open
             }
 
             function closeMobileMenu() {
@@ -1120,7 +1273,7 @@
                 mobileMenuOverlay.classList.remove('active');
                 mobileMenuBtn.classList.remove('active');
                 mobileMenuBtn.setAttribute('aria-expanded', 'false');
-                body.style.overflow = ''; // Restore body scroll
+                mobileBody.style.overflow = ''; // Restore body scroll
             }
 
             // Toggle menu on hamburger button click
