@@ -1602,19 +1602,19 @@
                         <div class="space-y-4">
                             <div>
                                 <h4 class="font-semibold text-lg mb-2 text-sky-400">The Challenge</h4>
-                                <p class="mb-4">Financial institutions face multi-million dollar fines if they miss sanctioned entities in OFAC screening, but they also can’t expose sensitive customer data. The challenge was designing a RAG-based system that could reliably surface sanctioned entities with zero tolerance for hallucinations, while keeping all PII fully protected.</p>
+                                <p class="mb-4">Financial institutions face multi-million dollar fines if they miss sanctioned entities in OFAC screening, but they also can’t expose sensitive customer data. Our capstone team is designing a RAG-based system that can reliably surface sanctioned entities with zero tolerance for hallucinations, while keeping all PII fully protected.</p>
                             </div>
                             <div>
                                 <h4 class="font-semibold text-lg mb-2 text-sky-400">Key Learning</h4>
-                                <p class="mb-4">This project taught me that production-grade RAG systems need more than good retrieval – they need rigorous evaluation and safety layers. I learned how to formalize requirements like “0% hallucination tolerance” into measurable metrics using RAGAS, and how privacy guarantees (via PII masking) become first-class design goals rather than afterthoughts.</p>
+                                <p class="mb-4">As we build SentinelRAG, we’re learning that production-grade RAG systems need more than good retrieval – they need rigorous evaluation and safety layers. We are actively formalizing requirements like “0% hallucination tolerance” into measurable metrics using RAGAS, and treating privacy guarantees (via PII masking) as first-class design goals rather than afterthoughts.</p>
                             </div>
                             <div>
                                 <h4 class="font-semibold text-lg mb-2 text-sky-400">Technical Approach</h4>
-                                <p class="mb-4">I architected a hybrid retrieval pipeline that combines BM25 keyword search with vector retrieval and cross-encoder re-ranking to maximize precision@1 for complex sanctions queries. A dedicated evaluation harness built on RAGAS runs 100+ test cases to track hallucinations and answer quality over time. On top of that, I integrated Microsoft Presidio to automatically detect and mask PII so that sensitive data never leaves the protected boundary, while still enabling high-accuracy entity matching.</p>
+                                <p class="mb-4">We are architecting a hybrid retrieval pipeline that combines BM25 keyword search with vector retrieval and cross-encoder re-ranking to maximize precision@1 for complex sanctions queries. In parallel, we’re building an evaluation harness on top of RAGAS to run 100+ test cases and track hallucinations and answer quality over time. On top of that, we are integrating Microsoft Presidio to automatically detect and mask PII so that sensitive data never leaves the protected boundary, while still enabling high-accuracy entity matching.</p>
                             </div>
                             <div>
                                 <h4 class="font-semibold text-lg mb-2 text-sky-400">Impact</h4>
-                                <p>SentinelRAG demonstrates how modern LLM and RAG techniques can be adapted to strict regulatory domains like sanctions compliance. The project pushed me to think like both an ML engineer and a risk/compliance stakeholder, balancing retrieval quality, evaluation rigor, and privacy-by-design in a single system.</p>
+                                <p>SentinelRAG is designed to show how modern LLM and RAG techniques can be adapted to strict regulatory domains like sanctions compliance. Through this capstone, our team is learning to think like both ML engineers and risk/compliance stakeholders, balancing retrieval quality, evaluation rigor, and privacy-by-design in a single system.</p>
                             </div>
                         </div>
                     `
