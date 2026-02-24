@@ -902,6 +902,22 @@
                             </div>
                         </div>
                     </div>
+                    <div class="project-card card" data-category="nlp">
+                        <img src="https://images.unsplash.com/photo-1531297484001-80022131f5a1?w=600&h=400&fit=crop&crop=center" class="w-full h-52 object-cover" alt="SentinelRAG Compliance System - abstract visualization of secure document retrieval">
+                        <div class="p-6">
+                            <div class="flex flex-wrap gap-2 mb-3">
+                                <span class="tag">RAG</span><span class="tag">LangChain</span><span class="tag">ChromaDB</span><span class="tag">Presidio</span><span class="tag">Python</span>
+                            </div>
+                            <h3 class="text-xl font-bold text-white">SentinelRAG: Privacy-Preserving Compliance System</h3>
+                            <p class="mt-2 text-slate-400">Capstone system for OFAC sanctions screening that combines hybrid retrieval (BM25 + vector search with re-ranking), a rigorous RAG evaluation framework (RAGAS), and a Microsoft Presidio-based privacy layer to enforce 0% hallucination tolerance across 100+ test cases while keeping PII fully masked.</p>
+                            <div class="mt-4 flex flex-wrap gap-4 text-sm">
+                                <button class="font-semibold text-slate-500 cursor-not-allowed" aria-disabled="true" title="GitHub repository coming soon">
+                                    GitHub (coming soon)
+                                </button>
+                                <button class="font-semibold text-sky-400 hover:underline project-story-btn" data-story="sentinelrag">Project Story 📖</button>
+                            </div>
+                        </div>
+                    </div>
                     <div class="project-card card" data-category="ml">
                         <img src="https://images.unsplash.com/photo-1460925895917-afdab827c52f?w=600&h=400&fit=crop&crop=center" class="w-full h-52 object-cover" alt="Dynamic Promotion Personalization - A/B testing dashboard with conversion metrics">
                         <div class="p-6">
@@ -1576,6 +1592,29 @@
                             <div>
                                 <h4 class="font-semibold text-lg mb-2 text-sky-400">Technical Innovation</h4>
                                 <p>I built a full-stack solution using FastAPI for the backend, Streamlit for the frontend, and integrated vector search with ChromaDB for intelligent schema recognition. The system supports both OpenAI and HuggingFace models, making it flexible and cost-effective. The automatic schema recognition and AI-powered query generation make complex databases accessible to non-technical users.</p>
+                            </div>
+                        </div>
+                    `
+                },
+                sentinelrag: {
+                    title: "SentinelRAG: Privacy-Preserving Compliance System - Project Story",
+                    content: `
+                        <div class="space-y-4">
+                            <div>
+                                <h4 class="font-semibold text-lg mb-2 text-sky-400">The Challenge</h4>
+                                <p class="mb-4">Financial institutions face multi-million dollar fines if they miss sanctioned entities in OFAC screening, but they also can’t expose sensitive customer data. The challenge was designing a RAG-based system that could reliably surface sanctioned entities with zero tolerance for hallucinations, while keeping all PII fully protected.</p>
+                            </div>
+                            <div>
+                                <h4 class="font-semibold text-lg mb-2 text-sky-400">Key Learning</h4>
+                                <p class="mb-4">This project taught me that production-grade RAG systems need more than good retrieval – they need rigorous evaluation and safety layers. I learned how to formalize requirements like “0% hallucination tolerance” into measurable metrics using RAGAS, and how privacy guarantees (via PII masking) become first-class design goals rather than afterthoughts.</p>
+                            </div>
+                            <div>
+                                <h4 class="font-semibold text-lg mb-2 text-sky-400">Technical Approach</h4>
+                                <p class="mb-4">I architected a hybrid retrieval pipeline that combines BM25 keyword search with vector retrieval and cross-encoder re-ranking to maximize precision@1 for complex sanctions queries. A dedicated evaluation harness built on RAGAS runs 100+ test cases to track hallucinations and answer quality over time. On top of that, I integrated Microsoft Presidio to automatically detect and mask PII so that sensitive data never leaves the protected boundary, while still enabling high-accuracy entity matching.</p>
+                            </div>
+                            <div>
+                                <h4 class="font-semibold text-lg mb-2 text-sky-400">Impact</h4>
+                                <p>SentinelRAG demonstrates how modern LLM and RAG techniques can be adapted to strict regulatory domains like sanctions compliance. The project pushed me to think like both an ML engineer and a risk/compliance stakeholder, balancing retrieval quality, evaluation rigor, and privacy-by-design in a single system.</p>
                             </div>
                         </div>
                     `
