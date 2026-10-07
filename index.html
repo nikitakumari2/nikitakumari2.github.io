@@ -511,17 +511,6 @@
         .stat-counter {
             transition: all 0.3s ease;
         }
-        /* Form Styles */
-        #contact-form input:focus,
-        #contact-form textarea:focus {
-            box-shadow: 0 0 0 3px rgba(56, 189, 248, 0.1);
-        }
-        #form-message.success {
-            color: #10b981;
-        }
-        #form-message.error {
-            color: #ef4444;
-        }
         /* Scroll Progress Indicator */
         .scroll-progress {
             position: fixed;
@@ -1135,42 +1124,22 @@
             </div>
         </section>
 
-        <!-- Contact Section -->
-        <section id="contact" class="py-24 sm:py-32">
-            <div class="max-w-3xl mx-auto px-4 sm:px-6 lg:px-8">
-                <div class="text-center mb-12">
-                    <h2 class="text-3xl sm:text-4xl font-bold text-white">Let's Connect</h2>
-                    <p class="mt-4 text-lg text-slate-400">
-                        I am actively seeking full-time opportunities and collaborations. <strong class="text-white">Willing to relocate anywhere in the USA.</strong> If you have a project in mind or just want to discuss the future of data, I'd love to hear from you.
-                    </p>
-                </div>
-                <div class="card p-8 md:p-10">
-                    <form id="contact-form" class="space-y-6" aria-label="Contact form">
-                        <div>
-                            <label for="name" class="block text-sm font-medium text-slate-300 mb-2">Name</label>
-                            <input type="text" id="name" name="name" required class="w-full px-4 py-3 bg-slate-800 border border-slate-700 rounded-lg text-white placeholder-slate-400 focus:outline-none focus:ring-2 focus:ring-sky-500 focus:border-transparent transition-all" placeholder="Your name">
-                        </div>
-                        <div>
-                            <label for="email" class="block text-sm font-medium text-slate-300 mb-2">Email</label>
-                            <input type="email" id="email" name="email" required class="w-full px-4 py-3 bg-slate-800 border border-slate-700 rounded-lg text-white placeholder-slate-400 focus:outline-none focus:ring-2 focus:ring-sky-500 focus:border-transparent transition-all" placeholder="your.email@example.com">
-                        </div>
-                        <div>
-                            <label for="subject" class="block text-sm font-medium text-slate-300 mb-2">Subject</label>
-                            <input type="text" id="subject" name="subject" required class="w-full px-4 py-3 bg-slate-800 border border-slate-700 rounded-lg text-white placeholder-slate-400 focus:outline-none focus:ring-2 focus:ring-sky-500 focus:border-transparent transition-all" placeholder="What's this about?">
-                        </div>
-                        <div>
-                            <label for="message" class="block text-sm font-medium text-slate-300 mb-2">Message</label>
-                            <textarea id="message" name="message" rows="6" required class="w-full px-4 py-3 bg-slate-800 border border-slate-700 rounded-lg text-white placeholder-slate-400 focus:outline-none focus:ring-2 focus:ring-sky-500 focus:border-transparent transition-all resize-none" placeholder="Tell me about your project or just say hello!"></textarea>
-                        </div>
-                        <div id="form-message" class="hidden text-center text-sm font-medium"></div>
-                        <button type="submit" class="w-full bg-sky-500 text-white font-bold text-lg py-4 px-10 rounded-lg hover:bg-sky-600 transition-all duration-300 transform hover:scale-105 shadow-lg shadow-sky-500/30 focus:outline-none focus:ring-2 focus:ring-sky-500 focus:ring-offset-2 focus:ring-offset-slate-900">
-                            Send Message
-                        </button>
-                    </form>
-                    <div class="mt-8 pt-8 border-t border-slate-700 text-center">
-                        <p class="text-slate-400 mb-4">Or reach out directly</p>
-                        <a href="mailto:nikitak.nk11@gmail.com" class="text-sky-400 hover:text-sky-300 font-medium transition-colors">
-                            nikitak.nk11@gmail.com
+        <!-- Closing CTA -->
+        <section id="contact" class="py-20 sm:py-24">
+            <div class="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8">
+                <div class="card px-6 py-10 sm:px-12 sm:py-12 flex flex-col md:flex-row items-center justify-between gap-8 text-center md:text-left border border-sky-500/20">
+                    <div>
+                        <h2 class="text-2xl sm:text-3xl font-bold text-white">Hiring for ML/AI? Let's talk.</h2>
+                        <p class="mt-3 text-slate-400">Open to full-time roles, and always happy to talk data and AI.</p>
+                    </div>
+                    <div class="flex flex-col sm:flex-row gap-3 shrink-0">
+                        <a href="mailto:nikitak.nk11@gmail.com" class="inline-flex items-center justify-center gap-2 bg-sky-500 text-white font-semibold py-3 px-6 rounded-lg hover:bg-sky-600 transition-all duration-300 transform hover:scale-105 shadow-lg shadow-sky-500/20" aria-label="Email Nikita Kumari">
+                            <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24" aria-hidden="true"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 8l7.89 5.26a2 2 0 002.22 0L21 8M5 19h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z"></path></svg>
+                            Email me
+                        </a>
+                        <a href="https://www.linkedin.com/in/nikitakumari2/" target="_blank" rel="noopener noreferrer" class="inline-flex items-center justify-center gap-2 bg-slate-700 text-white font-semibold py-3 px-6 rounded-lg hover:bg-slate-600 transition-all duration-300 transform hover:scale-105" aria-label="Connect with Nikita Kumari on LinkedIn">
+                            <svg class="w-5 h-5" fill="currentColor" viewBox="0 0 24 24" aria-hidden="true"><path d="M20.45 20.45h-3.56v-5.57c0-1.33-.02-3.04-1.85-3.04-1.85 0-2.14 1.45-2.14 2.94v5.67H9.35V9h3.41v1.56h.05c.48-.9 1.64-1.85 3.37-1.85 3.6 0 4.27 2.37 4.27 5.46v6.28zM5.34 7.43a2.06 2.06 0 110-4.13 2.06 2.06 0 010 4.13zM7.12 20.45H3.56V9h3.56v11.45zM22.22 0H1.77C.79 0 0 .77 0 1.73v20.54C0 23.23.79 24 1.77 24h20.45c.98 0 1.78-.77 1.78-1.73V1.73C24 .77 23.2 0 22.22 0z"/></svg>
+                            LinkedIn
                         </a>
                     </div>
                 </div>
@@ -2039,50 +2008,6 @@
             window.addEventListener('scroll', updateScrollProgress);
             updateScrollProgress();
 
-            // --- Contact Form Handler ---
-            const contactForm = document.getElementById('contact-form');
-            const formMessage = document.getElementById('form-message');
-
-            if (contactForm) {
-                contactForm.addEventListener('submit', async (e) => {
-                    e.preventDefault();
-                    
-                    const formData = new FormData(contactForm);
-                    const data = {
-                        name: formData.get('name'),
-                        email: formData.get('email'),
-                        subject: formData.get('subject'),
-                        message: formData.get('message')
-                    };
-
-                    // Show loading state
-                    const submitButton = contactForm.querySelector('button[type="submit"]');
-                    const originalText = submitButton.textContent;
-                    submitButton.textContent = 'Sending...';
-                    submitButton.disabled = true;
-                    formMessage.classList.add('hidden');
-
-                    // Simulate form submission (replace with actual API call)
-                    // For now, we'll use mailto as fallback
-                    setTimeout(() => {
-                        const mailtoLink = `mailto:nikitak.nk11@gmail.com?subject=${encodeURIComponent(data.subject)}&body=${encodeURIComponent(`Name: ${data.name}\nEmail: ${data.email}\n\nMessage:\n${data.message}`)}`;
-                        window.location.href = mailtoLink;
-                        
-                        formMessage.textContent = 'Thank you! Your message has been sent.';
-                        formMessage.classList.remove('hidden', 'error');
-                        formMessage.classList.add('success');
-                        contactForm.reset();
-                        
-                        submitButton.textContent = originalText;
-                        submitButton.disabled = false;
-
-                        // Hide message after 5 seconds
-                        setTimeout(() => {
-                            formMessage.classList.add('hidden');
-                        }, 5000);
-                    }, 1000);
-                });
-            }
         });
     </script>
 
